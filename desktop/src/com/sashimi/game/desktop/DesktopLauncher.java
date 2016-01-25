@@ -7,6 +7,9 @@ import com.sashimi.game.Sashimi;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "Sashimi";
+        config.width = 360;
+        config.height = 640;
 		new LwjglApplication(new Sashimi(), config);
 	}
 }

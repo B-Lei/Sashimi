@@ -11,6 +11,11 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+
+        // Saves battery by disabling accelerometer and compass
+		config.useAccelerometer = false;
+		config.useCompass = false;
+
 		initialize(new Sashimi(), config);
 	}
 }

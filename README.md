@@ -1,5 +1,3 @@
-<snippet>
-  <content><![CDATA[
 ## Sashimi
 Sashimi is a modern shoot-'em-up featuring fish, sharks, and other aquatic life.
 ## Installation
@@ -12,6 +10,3 @@ TODO: Write history
 TODO: Write credits
 ## License
 TODO: Write license
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>

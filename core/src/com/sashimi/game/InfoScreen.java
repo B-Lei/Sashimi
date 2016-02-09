@@ -2,12 +2,29 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.awt.Dialog;
+
+import javafx.stage.Stage;
 
 public class InfoScreen implements Screen {
 
     final Sashimi game;
+
+    private Texture waterImage;
+    public int waterWidth = 720;
+    public int waterHeight = 1400;
+    private Rectangle water;
 
     OrthographicCamera camera;
 
@@ -24,8 +41,18 @@ public class InfoScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        CharSequence instructions = "Goal: Swim to the top of the ocean while\navoiding the enemies." +
+                                    "\n\nHold down finger to move from side to side,\nand tap to shoot bubbles." +
+                                    "\n\nAdd better instructions here...";
+
+        waterImage = new Texture(Gdx.files.internal("waterImage.png"));
+
         game.batch.begin();
         //Add text for info screen
+        game.font.getData().setScale(2, 2);
+        game.batch.draw(waterImage, 0, -50, waterWidth, waterHeight);
+        game.font.setColor(Color.NAVY);
+        game.font.draw(game.batch, instructions, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()*2-50);
         game.batch.end();
 
         //for now if user touches screen, go back to MainScreen

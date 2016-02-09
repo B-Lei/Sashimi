@@ -28,8 +28,8 @@ public class GameScreen implements Screen {
 
 
     private Texture fishImage;
-    public int fishWidth = 300;
-    public int fishHeight = 124;
+    public int fishWidth = 150;
+    public int fishHeight = 200;
     private Rectangle fish;
     private OrthographicCamera camera;
 
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
 
         waterImage = new Texture(Gdx.files.internal("waterImage.png"));
 
-        fishImage = new Texture(Gdx.files.internal("tempFish.png"));
+        fishImage = new Texture(Gdx.files.internal("actorFish.png"));
         fish = new Rectangle(game.screenWidth/2-fishWidth/2, game.screenHeight/2-fishHeight/2, fishWidth, fishHeight);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
-        game.batch.draw(fishImage, fish.x, fish.y);
+        game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
         game.batch.end();
 
         if(Gdx.input.isTouched()) {

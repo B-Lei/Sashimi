@@ -16,9 +16,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class GameScreen implements Screen {
     final Sashimi game;
+
+    private Texture waterImage;
+    public int waterWidth = 720;
+    public int waterHeight = 1280;
+    private Rectangle water;
+
 
     private Texture fishImage;
     public int fishWidth = 300;
@@ -28,6 +35,8 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Sashimi game) {
         this.game = game;
+
+        waterImage = new Texture(Gdx.files.internal("waterImage.png"));
 
         fishImage = new Texture(Gdx.files.internal("tempFish.png"));
         fish = new Rectangle(game.screenWidth/2-fishWidth/2, game.screenHeight/2-fishHeight/2, fishWidth, fishHeight);
@@ -45,6 +54,7 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+        game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
         game.batch.draw(fishImage, fish.x, fish.y);
         game.batch.end();
 
@@ -93,5 +103,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         fishImage.dispose();
+        waterImage.dispose();
     }
 }

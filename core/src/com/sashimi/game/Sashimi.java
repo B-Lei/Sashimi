@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 //import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 //import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
@@ -26,6 +29,7 @@ public class Sashimi extends Game {
 	public void create () {
         atlas = new TextureAtlas();
         batch = new SpriteBatch();
+
         //generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Helvetica.OTF"));
         //parameter = new FreeTypeFontParameter();
         //parameter.size = 30;

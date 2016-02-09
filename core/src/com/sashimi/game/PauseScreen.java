@@ -36,7 +36,7 @@ public class PauseScreen implements Screen{
         pause = "PAUSE";
         pauseFont = new BitmapFont();
         pauseFont.setColor(Color.TEAL);
-
+        pauseFont.getData().scale(3);
         pauseFont.draw(game.batch, pause, 300, 700);
         game.batch.end();
 

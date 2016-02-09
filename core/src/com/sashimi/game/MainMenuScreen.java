@@ -4,17 +4,39 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
 
 public class MainMenuScreen implements Screen {
 
     final Sashimi game;
-
     OrthographicCamera camera;
+    SpriteBatch batch;
+    Texture buttonTex;
+    Rectangle button;
 
     public MainMenuScreen(final Sashimi game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+        batch = new SpriteBatch();
+
+
+        //Set up texture
+        buttonTex = new Texture(Gdx.files.internal("Raw_Images/Play Button.png"));
+        int buttonHeight = buttonTex.getHeight();
+        int buttonWidth = buttonTex.getWidth();
+        button = new Rectangle((game.screenWidth/2)-(buttonWidth/2), (game.screenHeight/2), buttonWidth, buttonHeight);
+        //System.out.println("screenHeight: "+game.screenHeight);
+        //System.out.println("screenWidth: "+game.screenWidth);
+
+
+
+
+
     }
 
     @Override
@@ -25,16 +47,35 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to Sashimi!", game.screenWidth/3 - 30, game.screenHeight/2 + 30);
-        game.font.draw(game.batch, "Tap anywhere to begin.", game.screenWidth/3 - 40, game.screenHeight/2 - 30);
+        game.batch.draw(buttonTex, button.x, button.y);
         game.batch.end();
 
-        if(Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
-            dispose();
+
+        if(Gdx.input.isTouched()){
+            int x = Gdx.input.getX();
+            int y = game.screenHeight - (Gdx.input.getY() * 2);
+            System.out.println("Touched: "+x+","+y);
+            System.out.println("Rectangle"+button.getX()+","+button.getY());
+
+            boolean fitsInWidth=false;
+            if(x >= button.getX() && x<= button.getX()+button.getWidth()){
+                fitsInWidth = true;
+            }
+            boolean fitsInHeight = false;
+            if(y>=button.getY() && y<= button.getHeight() + button.getY()){
+                fitsInHeight = true;
+            }
+
+            System.out.println(button.contains(x,y));
+            if(fitsInHeight && fitsInWidth){
+                game.level1();
+            }
         }
     }
+
+
 
     @Override
     public void resize(int width, int height) {
@@ -57,6 +98,8 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(){
+        batch.dispose();
+        buttonTex.dispose();
     }
 }

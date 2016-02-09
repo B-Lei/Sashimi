@@ -2,6 +2,7 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,11 +47,18 @@ public class Sashimi extends Game {
         super.render();
 	}
 
+
     //Called when Application is Destroyed
     public void dispose() {
         atlas.dispose();
         batch.dispose();
         font.dispose();
+    }
+
+    public void level1(){
+        System.out.println("Disposing of mainmenu");
+        screen.dispose();
+        setScreen(new GameScreen(this));
     }
 
     //Called When Home Button is Pressed or Incoming Call Received

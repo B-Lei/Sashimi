@@ -14,8 +14,8 @@ public class MainMenuScreen implements Screen {
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
-    Texture buttonTex;
-    Rectangle button;
+    //Texture buttonTex;
+    EasyButton play;
 
     public MainMenuScreen(final Sashimi game) {
         this.game = game;
@@ -23,19 +23,10 @@ public class MainMenuScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
 
-
-        //Set up texture
-        buttonTex = new Texture(Gdx.files.internal("Raw_Images/Play Button.png"));
-        int buttonHeight = buttonTex.getHeight();
-        int buttonWidth = buttonTex.getWidth();
-        button = new Rectangle((game.screenWidth/2)-(buttonWidth/2), (game.screenHeight/2), buttonWidth, buttonHeight);
-        //System.out.println("screenHeight: "+game.screenHeight);
-        //System.out.println("screenWidth: "+game.screenWidth);
-
-
-
-
-
+        //Sets up a play button
+        play = new EasyButton("Play Button.png");
+        play.setX((game.screenWidth/2)-(play.getWidth()/2));
+        play.setY((game.screenHeight/2));
     }
 
     @Override
@@ -46,29 +37,19 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-
+        //Render Play Button
         game.batch.begin();
-        game.batch.draw(buttonTex, button.x, button.y);
+        game.batch.draw(play.getButtonTexture(), play.getX(), play.getY());
         game.batch.end();
 
 
+        //In the event that screen is touched
         if(Gdx.input.isTouched()){
             int x = Gdx.input.getX();
-            int y = game.screenHeight - (Gdx.input.getY() * 2);
-            System.out.println("Touched: "+x+","+y);
-            System.out.println("Rectangle"+button.getX()+","+button.getY());
+            int y = Gdx.input.getY();
 
-            boolean fitsInWidth=false;
-            if(x >= button.getX() && x<= button.getX()+button.getWidth()){
-                fitsInWidth = true;
-            }
-            boolean fitsInHeight = false;
-            if(y>=button.getY() && y<= button.getHeight() + button.getY()){
-                fitsInHeight = true;
-            }
-
-            System.out.println(button.contains(x,y));
-            if(fitsInHeight && fitsInWidth){
+            //Checks if the play button is touched
+            if(play.contains(x,y,game.screenHeight)){
                 game.level1();
             }
         }
@@ -99,6 +80,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose(){
         batch.dispose();
-        buttonTex.dispose();
+        play.dispose();
     }
 }

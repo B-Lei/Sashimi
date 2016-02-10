@@ -4,18 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-
 
 public class MainMenuScreen implements Screen {
 
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
-    //Texture buttonTex;
     EasyButton play;
+    EasyButton info;
 
     public MainMenuScreen(final Sashimi game) {
         this.game = game;
@@ -27,6 +24,11 @@ public class MainMenuScreen implements Screen {
         play = new EasyButton("Play Button.png");
         play.setX((game.screenWidth/2)-(play.getWidth()/2));
         play.setY((game.screenHeight/2));
+
+        //Sets up an info button
+        info = new EasyButton("Info.png");
+        info.setX((game.screenWidth/2)-(info.getWidth()/2));
+        info.setY((game.screenHeight/2) - (2*info.getHeight()));
     }
 
     @Override
@@ -40,6 +42,7 @@ public class MainMenuScreen implements Screen {
         //Render Play Button
         game.batch.begin();
         game.batch.draw(play.getButtonTexture(), play.getX(), play.getY());
+        game.batch.draw(info.getButtonTexture(),info.getX(), info.getY());
         game.batch.end();
 
 
@@ -51,6 +54,11 @@ public class MainMenuScreen implements Screen {
             //Checks if the play button is touched
             if(play.contains(x,y,game.screenHeight)){
                 game.level1();
+            }
+
+            //Checks if info button is touched
+            if(info.contains(x,y,game.screenHeight)){
+                game.infoScreen();
             }
         }
     }
@@ -81,5 +89,6 @@ public class MainMenuScreen implements Screen {
     public void dispose(){
         batch.dispose();
         play.dispose();
+        info.dispose();
     }
 }

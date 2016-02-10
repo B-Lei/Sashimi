@@ -61,6 +61,12 @@ public class Sashimi extends Game {
         setScreen(new GameScreen(this));
     }
 
+    public void infoScreen(){
+        System.out.println("Disposing of mainmenu");
+        screen.dispose();
+        setScreen(new InfoScreen(this));
+    }
+
     //Called When Home Button is Pressed or Incoming Call Received
     //Good Place to Save Game State
     //public void pause() {}

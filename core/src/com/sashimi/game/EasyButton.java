@@ -33,11 +33,9 @@ public class EasyButton extends Rectangle{
 
     //Converts a raw xIn and yIn from Gdx.input to spritebatch coordinate point
     boolean contains(int x, int y, int screenHeight){
+        x*=2;
         y = screenHeight - (y * 2);
-
-        boolean isXIn = (x >= getX()) && (x <= (getX() + getWidth()) );
-        boolean isYIn = (y >= getY()) && (y <= (getY() + getHeight()) );
-        return (isXIn && isYIn);
+        return (contains(x,y));
     }
 
     void dispose(){

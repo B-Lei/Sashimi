@@ -33,7 +33,8 @@ public class VictoryScreen implements Screen{
         victoryMessage = "You Win!!!!!!";
         victoryFont = new BitmapFont();
         victoryFont.setColor(Color.GOLD);
-        victoryFont.draw(game.batch, victoryMessage, 300, 700);
+        victoryFont.getData().scale(3);
+        victoryFont.draw(game.batch, victoryMessage, 260, 700);
         game.batch.end();
 
         if(Gdx.input.isTouched()){

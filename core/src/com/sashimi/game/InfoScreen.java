@@ -40,7 +40,7 @@ public class InfoScreen implements Screen {
         waterImage = new Texture(Gdx.files.internal("waterImage.png"));
 
         //Set up menu button
-        menuButton = new EasyButton("Play Button.png");
+        menuButton = new EasyButton("Main Menu.png");
         menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
         menuButton.setY((game.screenHeight / 6));
 

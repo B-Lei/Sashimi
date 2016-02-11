@@ -30,7 +30,7 @@ public class MainMenuScreen implements Screen {
         playButton.setY((game.screenHeight/2));
 
         //Sets up info screen button
-        infoButton = new EasyButton("Play Button.png");
+        infoButton = new EasyButton("Instructions.png");
         infoButton.setX((game.screenWidth/2)-(infoButton.getWidth()/2));
         infoButton.setY((game.screenHeight/2) - (infoButton.getHeight()*3/2));
 

@@ -34,12 +34,12 @@ public class PauseScreen implements Screen{
         game.batch.setProjectionMatrix(camera.combined);
 
         //Set up play (resume game) button
-        resumeButton = new EasyButton("Play Button.png");
+        resumeButton = new EasyButton("Resume.png");
         resumeButton.setX((game.screenWidth / 2) - (resumeButton.getWidth() / 2));
         resumeButton.setY((game.screenHeight / 6));
 
         //Set up menu button
-        menuButton = new EasyButton("Play Button.png");
+        menuButton = new EasyButton("Main Menu.png");
         menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
         menuButton.setY((game.screenHeight / 6) - (resumeButton.getHeight()*3/2));
 

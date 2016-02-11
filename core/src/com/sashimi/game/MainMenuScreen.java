@@ -4,15 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+
 
 public class MainMenuScreen implements Screen {
 
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
-    EasyButton play;
-    EasyButton info;
+    //Texture buttonTex;
+    EasyButton playButton;
+    EasyButton infoButton;
 
     public MainMenuScreen(final Sashimi game) {
         this.game = game;
@@ -21,14 +25,15 @@ public class MainMenuScreen implements Screen {
         batch = new SpriteBatch();
 
         //Sets up a play button
-        play = new EasyButton("Play Button.png");
-        play.setX((game.screenWidth/2)-(play.getWidth()/2));
-        play.setY((game.screenHeight/2));
+        playButton = new EasyButton("Play Button.png");
+        playButton.setX((game.screenWidth/2)-(playButton.getWidth()/2));
+        playButton.setY((game.screenHeight/2));
 
-        //Sets up an info button
-        info = new EasyButton("Info.png");
-        info.setX((game.screenWidth/2)-(info.getWidth()/2));
-        info.setY((game.screenHeight/2) - (2*info.getHeight()));
+        //Sets up info screen button
+        infoButton = new EasyButton("Play Button.png");
+        infoButton.setX((game.screenWidth/2)-(infoButton.getWidth()/2));
+        infoButton.setY((game.screenHeight/2) - (infoButton.getHeight()*3/2));
+
     }
 
     @Override
@@ -41,8 +46,8 @@ public class MainMenuScreen implements Screen {
 
         //Render Play Button
         game.batch.begin();
-        game.batch.draw(play.getButtonTexture(), play.getX(), play.getY());
-        game.batch.draw(info.getButtonTexture(),info.getX(), info.getY());
+        game.batch.draw(playButton.getButtonTexture(), playButton.getX(), playButton.getY());
+        game.batch.draw(infoButton.getButtonTexture(), infoButton.getX(), infoButton.getY());
         game.batch.end();
 
 
@@ -52,12 +57,11 @@ public class MainMenuScreen implements Screen {
             int y = Gdx.input.getY();
 
             //Checks if the play button is touched
-            if(play.contains(x,y,game.screenHeight)){
+            if(playButton.contains(x,y,game.screenHeight)){
                 game.level1();
             }
-
-            //Checks if info button is touched
-            if(info.contains(x,y,game.screenHeight)){
+            //Check if the info button is touched
+            else if(infoButton.contains(x,y,game.screenHeight)){
                 game.infoScreen();
             }
         }
@@ -88,7 +92,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose(){
         batch.dispose();
-        play.dispose();
-        info.dispose();
+        playButton.dispose();
+        infoButton.dispose();
     }
 }

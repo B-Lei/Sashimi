@@ -33,6 +33,8 @@ public class GameScreen implements Screen {
     private Rectangle fish;
     private OrthographicCamera camera;
 
+    public EasyButton pauseButton;
+
     public GameScreen(final Sashimi game) {
         this.game = game;
 
@@ -42,6 +44,12 @@ public class GameScreen implements Screen {
         fish = new Rectangle(game.screenWidth/2-fishWidth/2, game.screenHeight/2-fishHeight/2, fishWidth, fishHeight);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+
+        //Set up menu button
+        pauseButton = new EasyButton("Play Button.png");
+        pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
+        pauseButton.setY((game.screenHeight) - (pauseButton.getHeight()*3/2));
+
     }
 
     @Override
@@ -56,12 +64,23 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
         game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
+        //Add pause button (temporary, will be improved later)
+        game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
 
         if(Gdx.input.isTouched()) {
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
+
+            //Checks if the menu button is touched
+            if(pauseButton.contains(x, y, game.screenHeight)){
+                game.pauseScreen();
+            }
+
             // Added some value to y to position fish above finger
             fish.x = touchPos.x - fishWidth / 2;
             fish.y = touchPos.y - fishHeight / 2 + 100;

@@ -13,11 +13,22 @@ public class VictoryScreen implements Screen{
     OrthographicCamera camera;
     private String victoryMessage;
     public BitmapFont victoryFont;
+    public EasyButton menuButton;
 
     public VictoryScreen(final Sashimi game){
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+
+        //Set up menu button
+        menuButton = new EasyButton("Play Button.png");
+        menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
+        menuButton.setY((game.screenHeight / 6));
+
+        //Set up text alerting player they won
+        victoryMessage = "You Win!!!!!!";
+        victoryFont = new BitmapFont();
+        victoryFont.setColor(Color.GOLD);
     }
 
 
@@ -29,16 +40,25 @@ public class VictoryScreen implements Screen{
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+
         //Adds text alerting player they won
-        victoryMessage = "You Win!!!!!!";
-        victoryFont = new BitmapFont();
-        victoryFont.setColor(Color.GOLD);
         victoryFont.draw(game.batch, victoryMessage, 300, 700);
+
+        //Adds main menu button
+        game.batch.draw(menuButton.getButtonTexture(), menuButton.getX(), menuButton.getY());
+
         game.batch.end();
 
-        if(Gdx.input.isTouched()){
-            game.setScreen(new MainMenuScreen(game));
-            this.dispose();
+        //Check if user touches the screen
+        if(Gdx.input.isTouched()) {
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+
+            //Checks if the menu button is touched
+            if(menuButton.contains(x,y,game.screenHeight)){
+                game.mainMenu();
+            }
+
         }
     }
 
@@ -63,7 +83,8 @@ public class VictoryScreen implements Screen{
     }
 
     public void dispose() {
-
+        menuButton.dispose();
+        victoryFont.dispose();
     }
 }
 

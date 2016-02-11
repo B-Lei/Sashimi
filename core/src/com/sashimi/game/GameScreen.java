@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
 
         //Set up menu button
-        pauseButton = new EasyButton("Play Button.png");
+        pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
         pauseButton.setY((game.screenHeight) - (pauseButton.getHeight()*3/2));
 

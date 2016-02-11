@@ -121,6 +121,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        pauseButton.dispose();
         fishImage.dispose();
         waterImage.dispose();
     }

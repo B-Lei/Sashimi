@@ -50,7 +50,6 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(infoButton.getButtonTexture(), infoButton.getX(), infoButton.getY());
         game.batch.end();
 
-
         //In the event that screen is touched
         if(Gdx.input.isTouched()){
             int x = Gdx.input.getX();
@@ -66,8 +65,6 @@ public class MainMenuScreen implements Screen {
             }
         }
     }
-
-
 
     @Override
     public void resize(int width, int height) {

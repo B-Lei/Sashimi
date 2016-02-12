@@ -11,7 +11,7 @@ public class Player extends Entity {
     final int moveSpeed = 10;
     private OrthographicCamera camera;
     private float fireDelay;
-    private int health = 5;
+    public int health = 5;
     public Bullet bullet;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();

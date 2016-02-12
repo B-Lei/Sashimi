@@ -52,9 +52,10 @@ public class GameScreen implements Screen {
 
 
         //Set up menu button
-        pauseButton = new EasyButton("Pause.png");
+        /*pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
         pauseButton.setY((game.screenHeight) - (pauseButton.getHeight() * 3 / 2));
+        */
 
     }
 
@@ -73,7 +74,7 @@ public class GameScreen implements Screen {
         if(enemy!= null)
             enemy.render();
         //Add pause button (temporary, will be improved later)
-        game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
+        //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
 
         if(Gdx.input.isTouched()) {
@@ -86,9 +87,9 @@ public class GameScreen implements Screen {
 
 
             //Checks if the menu button is touched
-            if(pauseButton.contains(x, y, game.screenHeight)){
+            /*if(pauseButton.contains(x, y, game.screenHeight)){
                 game.pauseScreen();
-            }
+            }*/
 
             // Added some value to y to position fish above finger
             fish.x = touchPos.x - fishWidth / 2;

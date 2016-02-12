@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Class for Enemy Creation and AI
  */
-public class Enemy extends Character{
+public class Enemy extends Entity {
     private Random random = new Random();
     private int targetX;
     private int targetY;

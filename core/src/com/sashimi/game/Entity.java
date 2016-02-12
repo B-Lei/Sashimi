@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.Rectangle;
  * Contains functionality to maintain that the sprite stays within boundaries
  * Also contains functionality to see if the sprite is hit
  */
-public class Character {
+public class Entity {
     final GameScreen screen;
     final protected Rectangle position;
     final Texture texture;
 
-    Character(GameScreen screen, int x, int y, String textureName){
+    Entity(GameScreen screen, int x, int y, String textureName){
         texture = new Texture(Gdx.files.internal(textureName));
         position = new Rectangle(x,y,texture.getWidth(),texture.getHeight());
         position.setX(x);

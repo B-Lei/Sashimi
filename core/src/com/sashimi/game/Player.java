@@ -7,24 +7,22 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 
-public class Player extends Character {
-    final Bullet bullet;
+public class Player extends Entity {
     final int moveSpeed = 10;
     private OrthographicCamera camera;
+    private float fireDelay;
+    private int health = 5;
+    public Bullet bullet;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 
     public Player(GameScreen screen, int x, int y, String textureName) {
         super(screen, x, y, textureName);
-        bullet = new Bullet(screen, x, y+texture.getHeight()/2,"bubble.png");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
     }
 
-    @Override
-    void render(){
-        camera.update();
-        bullet.update();
+    public void update() {
         screen.game.batch.setProjectionMatrix(camera.combined);
 
         if (Gdx.input.isTouched()) {
@@ -55,8 +53,29 @@ public class Player extends Character {
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 800 * Gdx.graphics.getDeltaTime();
+    }
+
+    void render(float deltaTime){
+        update();
+        camera.update();
+
+        if (health > 0) {
+            fireDelay -= deltaTime;
+            if(fireDelay <= 0) {
+                Bullet tempBullet = new Bullet(screen, (int) (position.x), (int) (position.y + texture.getHeight() / 2), "bubble.png");
+                bulletManager.add(tempBullet);
+                fireDelay += 0.2;
+            }
+        }
+
+        int counter = 0;
+        while(counter < bulletManager.size()) {
+            bullet = bulletManager.get(counter);
+            bullet.update();
+            screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
+            counter++;
+        }
 
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
-        //screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
     }
 }

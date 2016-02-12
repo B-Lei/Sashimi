@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
 
     private Vector<Enemy> enemies = new Vector<Enemy>();
     private Enemy enemy;
-    private Character you;
+    private Player you;
     private int yourWidth = 30;
     private int yourHeight = 50;
 
@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(BG, 0, 0, BGwidth, BGheight);
 
-        you.render();
+        you.render(delta);
 
         for(Enemy e: enemies) {
             if (e != null)
@@ -76,9 +76,10 @@ public class GameScreen implements Screen {
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
 
+        // Why doesn't bullet destroy the enemy?
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
-            if(e.isHit(you.getPosition())){
+            if(e.isHit(you.getPosition()) || e.isHit(you.bullet.getPosition())){
                 System.out.println("Enemy is hit");
                 e.dispose();
                 enemies.remove(e);

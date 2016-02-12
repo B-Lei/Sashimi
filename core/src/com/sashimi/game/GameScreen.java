@@ -22,6 +22,8 @@ public class GameScreen implements Screen {
 
     private Vector<Enemy> enemies = new Vector<Enemy>();
     private float enemySpawnDelay;
+    private int numEnemies;
+
     private Player you;
     private int yourWidth = 30;
     private int yourHeight = 50;
@@ -54,15 +56,18 @@ public class GameScreen implements Screen {
 
         you.render(delta);
 
-        // Spawn random enemies endlessly
-        if (you.health > 0) {
-            enemySpawnDelay -= delta;
-            if(enemySpawnDelay <= 0) {
-                int randomDeterminant = random(1);
-                String randomEnemy = (1 == randomDeterminant) ? "starfish.png" : "jelly.png";
-                Enemy tempEnemy = new Enemy(this,random(720),game.screenHeight,randomEnemy);
-                enemies.add(tempEnemy);
-                enemySpawnDelay += 0.5;
+        // Spawn random enemies up until 20
+        if (numEnemies < 20) {
+            if (you.health > 0) {
+                enemySpawnDelay -= delta;
+                if (enemySpawnDelay <= 0) {
+                    int randomDeterminant = random(1);
+                    String randomEnemy = (1 == randomDeterminant) ? "starfish.png" : "jelly.png";
+                    Enemy tempEnemy = new Enemy(this, random(720), game.screenHeight, randomEnemy);
+                    enemies.add(tempEnemy);
+                    enemySpawnDelay += 0.5;
+                    numEnemies++;
+                }
             }
         }
 
@@ -83,8 +88,13 @@ public class GameScreen implements Screen {
                 System.out.println("Enemy is hit");
                 e.dispose();
                 enemies.remove(e);
+                numEnemies--;
+                you.health--; // UNCOMMENT FOR INVINCIBILITY
             }
         }
+
+        // If your health is 0, go back to title screen
+        if (you.health <= 0) game.mainMenu();
 
         // Keeps you in the game's boundaries
         if(you.getPosition().x < 0) you.setX(0);
@@ -117,7 +127,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        pauseButton.dispose();
+//        pauseButton.dispose();
         you.dispose();
         BG.dispose();
         for(Enemy e: enemies){

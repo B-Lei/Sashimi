@@ -94,17 +94,18 @@ public class GameScreen implements Screen {
             // Added some value to y to position fish above finger
             fish.x = touchPos.x - fishWidth / 2;
             fish.y = touchPos.y - fishHeight / 2 + 100;
-            if(enemy!=null && enemy.isHit(fish)){
-                System.out.println("Enemy is hit");
-                enemy.dispose();
-                enemy = null;
-            }
         }
 
         if(Gdx.input.isKeyPressed(Keys.LEFT)) fish.x -= 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Keys.RIGHT)) fish.x += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Keys.UP)) fish.y += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Keys.DOWN)) fish.y -= 800 * Gdx.graphics.getDeltaTime();
+
+        if(enemy!=null && enemy.isHit(fish)){
+            System.out.println("Enemy is hit");
+            enemy.dispose();
+            enemy = null;
+        }
 
         if(fish.x < 0) fish.x = 0;
         if(fish.x > game.screenWidth - fishWidth) fish.x = game.screenWidth-fishWidth;

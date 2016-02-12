@@ -131,7 +131,8 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Keys.DOWN)) fish.y -= 800 * Gdx.graphics.getDeltaTime();
 
 
-        for(Enemy e: enemies){
+        for(int i=0; i<enemies.size(); i++){
+            Enemy e = enemies.get(i);
             if(e.isHit(fish)){
                 System.out.println("Enemy is hit");
                 e.dispose();

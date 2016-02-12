@@ -1,6 +1,7 @@
 package com.sashimi.game;
 
 import java.util.Iterator;
+import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -25,6 +26,7 @@ public class GameScreen implements Screen {
     public int waterWidth = 720;
     public int waterHeight = 1280;
     private Rectangle water;
+    private Vector<Enemy> enemies = new Vector<Enemy>();
 
 
     private Enemy enemy;
@@ -52,6 +54,10 @@ public class GameScreen implements Screen {
 
         // Enemy Generation
         enemy = new Enemy(this,0,0,"tempFish.png");
+        Enemy enemy2 = new Enemy(this,0,0,"tempFish.png");
+        enemies.add(enemy);
+        enemies.add(enemy2);
+        enemies.elementAt(1).setY(100);
 
         moveSpeed = 10;
 
@@ -76,8 +82,10 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
         game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
-        if(enemy!= null)
-            enemy.render();
+        for(Enemy e: enemies) {
+            if (e != null)
+                e.render();
+        }
 
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
@@ -122,10 +130,13 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Keys.UP)) fish.y += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Keys.DOWN)) fish.y -= 800 * Gdx.graphics.getDeltaTime();
 
-        if(enemy!=null && enemy.isHit(fish)){
-            System.out.println("Enemy is hit");
-            enemy.dispose();
-            enemy = null;
+
+        for(Enemy e: enemies){
+            if(e.isHit(fish)){
+                System.out.println("Enemy is hit");
+                e.dispose();
+                enemies.remove(e);
+            }
         }
 
         if(fish.x < 0) fish.x = 0;
@@ -161,8 +172,8 @@ public class GameScreen implements Screen {
         pauseButton.dispose();
         fishImage.dispose();
         waterImage.dispose();
-        if(enemy!=null) {
-            enemy.dispose();
+        for(Enemy e: enemies){
+            e.dispose();
         }
     }
 }

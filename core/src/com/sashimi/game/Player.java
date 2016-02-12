@@ -72,7 +72,14 @@ public class Player extends Entity {
         while(counter < bulletManager.size()) {
             bullet = bulletManager.get(counter);
             bullet.update();
-            screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
+            // Saves memory by removing bullets that are out of bounds
+            if(bullet.bulletLocation.x > 0 && bullet.bulletLocation.x < screen.game.screenWidth && bullet.bulletLocation.y > 0 && bullet.bulletLocation.y < screen.game.screenHeight)
+                screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
+            else {
+                bulletManager.remove(counter);
+                if(bulletManager.size() > 0)
+                    counter--;
+            }
             counter++;
         }
 

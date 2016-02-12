@@ -7,21 +7,23 @@ import java.util.Random;
  */
 public class Enemy extends Character{
     private Random random = new Random();
-    private int target;
+    private int targetX;
+    private int targetY;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,textureName);
-        target = 70;
+        targetX = 70;
+        targetY = 70;
     }
 
 
     void moveLeftAndRight(){
-        if(position.contains(target,position.getY())){
-            target = random.nextInt(screen.game.screenWidth);
+        if(position.contains(targetX,position.getY())){
+            targetX = random.nextInt(screen.game.screenWidth);
         }
 
 
-        if(position.getX() < target){
+        if(position.getX() < targetX){
             position.setX(position.getX() + screen.moveSpeed);
         }
         else{
@@ -29,9 +31,23 @@ public class Enemy extends Character{
         }
     }
 
+    void moveUpAndDown(){
+        if(position.contains(position.getX(),targetY)){
+            targetY = random.nextInt(screen.game.screenWidth);
+        }
+
+        if(position.getY() < targetY){
+            position.setY(position.getY() + screen.moveSpeed);
+        }
+        else{
+            position.setY(position.getY() - screen.moveSpeed);
+        }
+    }
+
     @Override
     void render(){
         moveLeftAndRight();
+        moveUpAndDown();
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
 

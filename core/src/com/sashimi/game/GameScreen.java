@@ -34,6 +34,9 @@ public class GameScreen implements Screen {
     private Rectangle fish;
     private OrthographicCamera camera;
 
+    //Used by multiple classes to determine how fast a character can move
+    final int moveSpeed;
+
 
     public EasyButton pauseButton;
 
@@ -49,6 +52,8 @@ public class GameScreen implements Screen {
 
         // Enemy Generation
         enemy = new Enemy(this,0,0,"tempFish.png");
+
+        moveSpeed = 10;
 
 
         //Set up menu button
@@ -93,8 +98,23 @@ public class GameScreen implements Screen {
             }*/
 
             // Added some value to y to position fish above finger
+            if(fish.x < touchPos.x) {
+                fish.setX(fish.x + moveSpeed);
+            }
+            else if(fish.x > touchPos.x+10){
+                fish.setX(fish.x - moveSpeed);
+            }
+
+            if(fish.y < touchPos.y){
+                fish.setY(fish.y + moveSpeed);
+            }
+            else if (fish.y > touchPos.y+10){
+                fish.setY(fish.y - moveSpeed);
+            }
+            /*
             fish.x = touchPos.x - fishWidth / 2;
             fish.y = touchPos.y - fishHeight / 2 + 100;
+            */
         }
 
         if(Gdx.input.isKeyPressed(Keys.LEFT)) fish.x -= 800 * Gdx.graphics.getDeltaTime();

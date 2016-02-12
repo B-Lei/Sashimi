@@ -22,10 +22,10 @@ public class Enemy extends Character{
 
 
         if(position.getX() < target){
-            position.setX(position.getX() + 10);
+            position.setX(position.getX() + screen.moveSpeed);
         }
         else{
-            position.setX(position.getX() - 10);
+            position.setX(position.getX() - screen.moveSpeed);
         }
     }
 

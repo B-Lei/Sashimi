@@ -37,16 +37,16 @@ public class InfoScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
 
         //Set up water image as background
-        waterImage = new Texture(Gdx.files.internal("waterImage.png"));
+        waterImage = new Texture(Gdx.files.internal("seaBG.png"));
 
         //Set up menu button
         menuButton = new EasyButton("Main Menu.png");
         menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
-        menuButton.setY((game.screenHeight / 6));
+        menuButton.setY((game.screenHeight / 2) -  30);
 
         //Set up font for info screen
         infoFont = new BitmapFont();
-        infoFont.setColor(Color.NAVY);
+        infoFont.setColor(Color.WHITE);
         infoFont.getData().setScale(2,2);
 
     }

@@ -28,16 +28,12 @@ public class GameScreen implements Screen {
     private int yourWidth = 30;
     private int yourHeight = 50;
 
-    //Used by multiple classes to determine how fast a character can move
-    final int moveSpeed = 10;
-
-
     public EasyButton pauseButton;
 
     public GameScreen(final Sashimi game) {
         this.game = game;
         BG = new Texture(Gdx.files.internal("BG/BG1.png"));
-        you = new Player(this,game.screenWidth/2-yourWidth,game.screenHeight/2-yourHeight,"mrfish.png");
+        you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
 
         //Set up menu button
         /*pauseButton = new EasyButton("Pause.png");
@@ -62,7 +58,7 @@ public class GameScreen implements Screen {
                 enemySpawnDelay -= delta;
                 if (enemySpawnDelay <= 0) {
                     int randomDeterminant = random(1);
-                    String randomEnemy = (1 == randomDeterminant) ? "starfish.png" : "jelly.png";
+                    String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
                     Enemy tempEnemy = new Enemy(this, random(720), game.screenHeight, randomEnemy);
                     enemies.add(tempEnemy);
                     enemySpawnDelay += 0.5;

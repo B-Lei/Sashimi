@@ -9,6 +9,7 @@ public class Enemy extends Entity {
     private Random random = new Random();
     private int targetX;
     private int targetY;
+    private int moveSpeed = 7;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,"Enemies/"+textureName);
@@ -24,10 +25,10 @@ public class Enemy extends Entity {
 
 
         if(position.getX() < targetX){
-            position.setX(position.getX() + screen.moveSpeed);
+            position.setX(position.getX() + moveSpeed);
         }
         else{
-            position.setX(position.getX() - screen.moveSpeed);
+            position.setX(position.getX() - moveSpeed);
         }
     }
 
@@ -37,10 +38,10 @@ public class Enemy extends Entity {
         }
 
         if(position.getY() < targetY){
-            position.setY(position.getY() + screen.moveSpeed);
+            position.setY(position.getY() + moveSpeed);
         }
         else{
-            position.setY(position.getY() - screen.moveSpeed);
+            position.setY(position.getY() - moveSpeed);
         }
     }
 

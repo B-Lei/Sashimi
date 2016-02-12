@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 
 public class Player extends Entity {
-    final int moveSpeed = 10;
     private OrthographicCamera camera;
     private float fireDelay;
-    public int health = 5;
+    public int health = 10;
     public Bullet bullet;
+    private int moveSpeed = 10;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 

@@ -17,7 +17,7 @@ public class Player extends Entity {
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 
     public Player(GameScreen screen, int x, int y, String textureName) {
-        super(screen, x, y, textureName);
+        super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
     }

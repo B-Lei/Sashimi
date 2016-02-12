@@ -11,7 +11,7 @@ public class Enemy extends Entity {
     private int targetY;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
-        super(screen,x,y,textureName);
+        super(screen,x,y,"Enemies/"+textureName);
         targetX = 70;
         targetY = 70;
     }

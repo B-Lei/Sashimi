@@ -37,7 +37,7 @@ public class InfoScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
 
         //Set up water image as background
-        waterImage = new Texture(Gdx.files.internal("seaBG.png"));
+        waterImage = new Texture(Gdx.files.internal("BG/seaBG.png"));
 
         //Set up menu button
         menuButton = new EasyButton("Main Menu.png");

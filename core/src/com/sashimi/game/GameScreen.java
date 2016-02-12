@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final Sashimi game) {
         this.game = game;
-        BG = new Texture(Gdx.files.internal("BG1.png"));
+        BG = new Texture(Gdx.files.internal("BG/BG1.png"));
         you = new Player(this,game.screenWidth/2-yourWidth,game.screenHeight/2-yourHeight,"mrfish.png");
 
         //Set up menu button
@@ -90,11 +90,12 @@ public class GameScreen implements Screen {
                 enemies.remove(e);
                 numEnemies--;
                 you.health--; // UNCOMMENT FOR INVINCIBILITY
+                System.out.println("Your HP: "+ you.health);
             }
         }
 
         // If your health is 0, go back to title screen
-        if (you.health <= 0) game.mainMenu();
+        if (you.health <= 0) game.gameOver();
 
         // Keeps you in the game's boundaries
         if(you.getPosition().x < 0) you.setX(0);

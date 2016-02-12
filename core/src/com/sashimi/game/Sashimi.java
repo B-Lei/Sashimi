@@ -56,21 +56,27 @@ public class Sashimi extends Game {
     }
 
     public void level1(){
-        System.out.println("Disposing of mainmenu");
+        System.out.println("Disposing of main menu screen");
         screen.dispose();
         setScreen(new GameScreen(this));
     }
 
     public void infoScreen(){
-        System.out.println("Disposing of mainmenu");
+        System.out.println("Disposing of main menu screen");
         screen.dispose();
         setScreen(new InfoScreen(this));
     }
 
     public void mainMenu(){
-        System.out.println("Disposing of screen");
+        System.out.println("Disposing of info / game over screen");
         screen.dispose();
         setScreen(new MainMenuScreen(this));
+    }
+
+    public void gameOver(){
+        System.out.println("Disposing of game screen");
+        screen.dispose();
+        setScreen(new GameOverScreen(this));
     }
 
     public void pauseScreen(){

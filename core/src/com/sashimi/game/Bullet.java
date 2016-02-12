@@ -7,7 +7,7 @@ public class Bullet extends Entity {
     private Vector2 bulletVelocity = new Vector2(0,0);
 
     public Bullet(GameScreen screen, int x, int y, String textureName) {
-        super(screen, x, y, textureName);
+        super(screen, x, y, "Bullets/"+textureName);
         bulletLocation = new Vector2(x,y);
         bulletVelocity = new Vector2(0,20);
     }

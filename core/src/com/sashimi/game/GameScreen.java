@@ -27,11 +27,13 @@ public class GameScreen implements Screen {
     private Rectangle water;
 
 
+    private Character enemy;
     private Texture fishImage;
     public int fishWidth = 150;
     public int fishHeight = 200;
     private Rectangle fish;
     private OrthographicCamera camera;
+
 
     public EasyButton pauseButton;
 
@@ -45,10 +47,14 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
 
+        // Enemy Generation
+        enemy = new Character(this,0,0,"tempFish.png");
+
+
         //Set up menu button
         pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
-        pauseButton.setY((game.screenHeight) - (pauseButton.getHeight()*3/2));
+        pauseButton.setY((game.screenHeight) - (pauseButton.getHeight() * 3 / 2));
 
     }
 
@@ -64,6 +70,8 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
         game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
+        if(enemy!= null)
+            enemy.render();
         //Add pause button (temporary, will be improved later)
         game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
@@ -76,6 +84,7 @@ public class GameScreen implements Screen {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
 
+
             //Checks if the menu button is touched
             if(pauseButton.contains(x, y, game.screenHeight)){
                 game.pauseScreen();
@@ -84,6 +93,11 @@ public class GameScreen implements Screen {
             // Added some value to y to position fish above finger
             fish.x = touchPos.x - fishWidth / 2;
             fish.y = touchPos.y - fishHeight / 2 + 100;
+            if(enemy!=null && enemy.isHit(fish)){
+                System.out.println("Enemy is hit");
+                enemy.dispose();
+                enemy = null;
+            }
         }
 
         if(Gdx.input.isKeyPressed(Keys.LEFT)) fish.x -= 800 * Gdx.graphics.getDeltaTime();
@@ -124,5 +138,8 @@ public class GameScreen implements Screen {
         pauseButton.dispose();
         fishImage.dispose();
         waterImage.dispose();
+        if(enemy!=null) {
+            enemy.dispose();
+        }
     }
 }

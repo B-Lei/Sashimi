@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Character {
     final GameScreen screen;
-    final private Rectangle position;
+    final protected Rectangle position;
     final Texture texture;
 
     Character(GameScreen screen, int x, int y, String textureName){

@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     private Rectangle water;
 
 
-    private Character enemy;
+    private Enemy enemy;
     private Texture fishImage;
     public int fishWidth = 150;
     public int fishHeight = 200;
@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
 
         // Enemy Generation
-        enemy = new Character(this,0,0,"tempFish.png");
+        enemy = new Enemy(this,0,0,"tempFish.png");
 
 
         //Set up menu button
@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
         game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
         if(enemy!= null)
             enemy.render();
+
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();

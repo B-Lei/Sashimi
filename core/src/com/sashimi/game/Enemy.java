@@ -7,9 +7,9 @@ import java.util.Random;
  */
 public class Enemy extends Entity {
     private Random random = new Random();
-    private int targetX;
-    private int targetY;
-    private int moveSpeed = 7;
+    protected int targetX;
+    protected int targetY;
+    protected int moveSpeed = 7;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,"Enemies/"+textureName);

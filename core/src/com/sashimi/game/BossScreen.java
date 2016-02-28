@@ -11,6 +11,7 @@ public class BossScreen extends GameScreen {
     BossScreen(final Sashimi game) {
         super(game);
         this.game = game;
+        enemies.add(new Level1Boss(this,500,500));
 
     }
 
@@ -18,6 +19,10 @@ public class BossScreen extends GameScreen {
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(BG, 0, 0, game.screenWidth, game.screenHeight);
+        you.render();
+        for(Enemy e: enemies){
+            e.render();
+        }
         game.batch.end();
     }
 

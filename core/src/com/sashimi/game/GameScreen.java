@@ -15,18 +15,18 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class GameScreen implements Screen {
     final Sashimi game;
 
-    private Texture BG;
-    public int BGwidth = 720;
-    public int BGheight = 1280;
+    protected Texture BG;
+    protected int BGwidth = 720;
+    protected int BGheight = 1280;
     private Rectangle water;
 
-    private Vector<Enemy> enemies = new Vector<Enemy>();
-    private float enemySpawnDelay;
-    private int numEnemies;
+    protected Vector<Enemy> enemies = new Vector<Enemy>();
+    protected float enemySpawnDelay;
+    protected int numEnemies;
 
-    private Player you;
-    private int yourWidth = 30;
-    private int yourHeight = 50;
+    protected Player you;
+    protected int yourWidth = 30;
+    protected int yourHeight = 50;
 
     public EasyButton pauseButton;
 

@@ -15,5 +15,6 @@ public class Bullet extends Entity {
     public void update() {
         bulletLocation.x += bulletVelocity.x;
         bulletLocation.y += bulletVelocity.y;
+        position.setPosition(bulletLocation);
     }
 }

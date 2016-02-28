@@ -84,7 +84,8 @@ public class Player extends Entity {
             bullet = bulletManager.get(counter);
             bullet.update();
             // Saves memory by removing bullets that are out of bounds
-            if(bullet.bulletLocation.x > 0 && bullet.bulletLocation.x < screen.game.screenWidth && bullet.bulletLocation.y > 0 && bullet.bulletLocation.y < screen.game.screenHeight)
+            //Note Changed to -30 for overlap of rectangle and boundary
+            if(bullet.bulletLocation.x > -30 && bullet.bulletLocation.x < screen.game.screenWidth && bullet.bulletLocation.y > 0 && bullet.bulletLocation.y < screen.game.screenHeight)
                 screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
             else {
                 bulletManager.remove(counter);

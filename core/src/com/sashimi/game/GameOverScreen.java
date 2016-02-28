@@ -4,21 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
-
-public class MainMenuScreen implements Screen {
+public class GameOverScreen implements Screen {
 
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
     //Texture buttonTex;
     EasyButton playButton;
-    EasyButton infoButton;
+    EasyButton mainMenu;
 
-    public MainMenuScreen(final Sashimi game) {
+    public GameOverScreen(final Sashimi game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
@@ -30,9 +27,9 @@ public class MainMenuScreen implements Screen {
         playButton.setY((game.screenHeight/2));
 
         //Sets up info screen button
-        infoButton = new EasyButton("Instructions.png");
-        infoButton.setX((game.screenWidth/2)-(infoButton.getWidth()/2));
-        infoButton.setY((game.screenHeight/2) - (infoButton.getHeight()*3/2));
+        mainMenu = new EasyButton("Main Menu.png");
+        mainMenu.setX((game.screenWidth / 2) - (mainMenu.getWidth() / 2));
+        mainMenu.setY((game.screenHeight / 2) - (mainMenu.getHeight() * 3 / 2));
 
     }
 
@@ -47,7 +44,7 @@ public class MainMenuScreen implements Screen {
         //Render Play Button
         game.batch.begin();
         game.batch.draw(playButton.getButtonTexture(), playButton.getX(), playButton.getY());
-        game.batch.draw(infoButton.getButtonTexture(), infoButton.getX(), infoButton.getY());
+        game.batch.draw(mainMenu.getButtonTexture(), mainMenu.getX(), mainMenu.getY());
         game.batch.end();
 
         //In the event that screen is touched
@@ -55,18 +52,13 @@ public class MainMenuScreen implements Screen {
             int x = Gdx.input.getX();
             int y = Gdx.input.getY();
 
-            System.out.println("Screen touched! X: " + x + " Y: " + y);
-
             //Checks if the play button is touched
-
-            System.out.println("Infobutton coords - X: " + infoButton.getX() + " Y: " + infoButton.getY());
-
             if(playButton.contains(x,y,game.screenHeight)){
                 game.level1();
             }
             //Check if the info button is touched
-            else if(infoButton.contains(x,y,game.screenHeight)){
-                game.infoScreen();
+            else if(mainMenu.contains(x,y,game.screenHeight)){
+                game.mainMenu();
             }
         }
     }
@@ -95,6 +87,6 @@ public class MainMenuScreen implements Screen {
     public void dispose(){
         batch.dispose();
         playButton.dispose();
-        infoButton.dispose();
+        mainMenu.dispose();
     }
 }

@@ -16,6 +16,8 @@ public class PauseScreen implements Screen{
     OrthographicCamera camera;
     private String pause;
     public BitmapFont pauseFont;
+    public EasyButton resumeButton;
+    public EasyButton menuButton;
 
     public PauseScreen(final Sashimi game){
             this.game = game;
@@ -31,18 +33,46 @@ public class PauseScreen implements Screen{
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        //Set up play (resume game) button
+        resumeButton = new EasyButton("Resume.png");
+        resumeButton.setX((game.screenWidth / 2) - (resumeButton.getWidth() / 2));
+        resumeButton.setY((game.screenHeight / 6));
+
+        //Set up menu button
+        menuButton = new EasyButton("Main Menu.png");
+        menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
+        menuButton.setY((game.screenHeight / 6) - (resumeButton.getHeight()*3/2));
+
         game.batch.begin();
+
         //Adds text that says "PAUSE"
         pause = "PAUSE";
         pauseFont = new BitmapFont();
         pauseFont.setColor(Color.TEAL);
         pauseFont.getData().scale(3);
         pauseFont.draw(game.batch, pause, 300, 700);
+
+        //Add resume button
+        game.batch.draw(resumeButton.getButtonTexture(), resumeButton.getX(), resumeButton.getY());
+
+        //Adds main menu button
+        game.batch.draw(menuButton.getButtonTexture(), menuButton.getX(), menuButton.getY());
+
         game.batch.end();
 
-        if(Gdx.input.isTouched()){
-            game.setScreen(new MainMenuScreen(game));
-            dispose();
+        //Check if user touches the screen
+        if(Gdx.input.isTouched()) {
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+
+            //Checks if the menu button is touched
+            if(resumeButton.contains(x,y,game.screenHeight)){
+                game.level1();
+            }
+            else if(menuButton.contains(x,y,game.screenHeight)){
+                game.mainMenu();
+            }
+
         }
     }
 
@@ -69,6 +99,8 @@ public class PauseScreen implements Screen{
     }
 @Override
     public void dispose() {
-    pauseFont.dispose();
+        pauseFont.dispose();
+        resumeButton.dispose();
+        menuButton.dispose();
     }
 }

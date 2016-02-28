@@ -1,47 +1,45 @@
 package com.sashimi.game;
 
-import java.util.Iterator;
+import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import static com.badlogic.gdx.math.MathUtils.random;
 
 public class GameScreen implements Screen {
     final Sashimi game;
 
-    private Texture waterImage;
-    public int waterWidth = 720;
-    public int waterHeight = 1280;
+    private Texture BG;
+    public int BGwidth = 720;
+    public int BGheight = 1280;
     private Rectangle water;
 
+    private Vector<Enemy> enemies = new Vector<Enemy>();
+    private float enemySpawnDelay;
+    private int numEnemies;
 
-    private Texture fishImage;
-    public int fishWidth = 150;
-    public int fishHeight = 200;
-    private Rectangle fish;
-    private OrthographicCamera camera;
+    private Player you;
+    private int yourWidth = 30;
+    private int yourHeight = 50;
+
+    public EasyButton pauseButton;
 
     public GameScreen(final Sashimi game) {
         this.game = game;
+        BG = new Texture(Gdx.files.internal("BG/BG1.png"));
+        you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
 
-        waterImage = new Texture(Gdx.files.internal("waterImage.png"));
-
-        fishImage = new Texture(Gdx.files.internal("actorFish.png"));
-        fish = new Rectangle(game.screenWidth/2-fishWidth/2, game.screenHeight/2-fishHeight/2, fishWidth, fishHeight);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+        //Set up menu button
+        /*pauseButton = new EasyButton("Pause.png");
+        pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
+        pauseButton.setY((game.screenHeight) - (pauseButton.getHeight() * 3 / 2));
+        */
     }
 
     @Override
@@ -49,33 +47,51 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-
-        game.batch.setProjectionMatrix(camera.combined);
-
         game.batch.begin();
-        game.batch.draw(waterImage, 0, 0, waterWidth, waterHeight);
-        game.batch.draw(fishImage, fish.x, fish.y, fishWidth, fishHeight);
-        game.batch.end();
+        game.batch.draw(BG, 0, 0, BGwidth, BGheight);
 
-        if(Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-            // Added some value to y to position fish above finger
-            fish.x = touchPos.x - fishWidth / 2;
-            fish.y = touchPos.y - fishHeight / 2 + 100;
+        you.render(delta);
+
+        // Spawn random enemies up until 20
+        if (numEnemies < 20) {
+            if (you.health > 0) {
+                enemySpawnDelay -= delta;
+                if (enemySpawnDelay <= 0) {
+                    int randomDeterminant = random(1);
+                    String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
+                    Enemy tempEnemy = new Enemy(this, random(720), game.screenHeight, randomEnemy);
+                    enemies.add(tempEnemy);
+                    enemySpawnDelay += 0.5;
+                    numEnemies++;
+                }
+            }
         }
 
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) fish.x -= 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) fish.x += 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.UP)) fish.y += 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Keys.DOWN)) fish.y -= 800 * Gdx.graphics.getDeltaTime();
+        // Render enemies
+        for(Enemy e: enemies) {
+            if (e != null)
+                e.render();
+        }
 
-        if(fish.x < 0) fish.x = 0;
-        if(fish.x > game.screenWidth - fishWidth) fish.x = game.screenWidth-fishWidth;
-        if(fish.y < 0) fish.y = 0;
-        if(fish.y > game.screenHeight - fishHeight) fish.y = game.screenHeight-fishHeight;
+        //Add pause button (temporary, will be improved later)
+        //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
+        game.batch.end();
+
+        // Handles enemy collisions - why doesn't bullet destroy the enemy?
+        for(int i=0; i<enemies.size(); i++){
+            Enemy e = enemies.get(i);
+            if(e.isHit(you.getPosition()) || e.isHit(you.bullet.getPosition())){
+                System.out.println("Enemy is hit");
+                e.dispose();
+                enemies.remove(e);
+                numEnemies--;
+                you.health--; // UNCOMMENT FOR INVINCIBILITY
+                System.out.println("Your HP: "+ you.health);
+            }
+        }
+
+        // If your health is 0, go back to title screen
+        if (you.health <= 0) game.gameOver();
     }
 
     @Override
@@ -102,7 +118,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        fishImage.dispose();
-        waterImage.dispose();
+//        pauseButton.dispose();
+        you.dispose();
+        BG.dispose();
+        for(Enemy e: enemies){
+            e.dispose();
+        }
     }
 }

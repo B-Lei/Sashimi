@@ -73,25 +73,41 @@ public class GameScreen implements Screen {
                 e.render();
         }
 
-        //Add pause button (temporary, will be improved later)
-        //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
-        game.batch.end();
-
         // Handles enemy collisions - why doesn't bullet destroy the enemy?
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
-            if(e.isHit(you.getPosition()) || e.isHit(you.bullet.getPosition())){
-                System.out.println("Enemy is hit");
+            //If you are hit by an enemy
+            if(e.isHit(you.getPosition())){
+                //System.out.println("You Were Hit By an Enemy");
                 e.dispose();
                 enemies.remove(e);
                 numEnemies--;
                 you.health--; // UNCOMMENT FOR INVINCIBILITY
                 System.out.println("Your HP: "+ you.health);
             }
+
+            //Handles Bullet Collisions
+            for(int j=0; j<you.bulletManager.size(); j++){
+                if(e.isHit(you.bulletManager.get(j).getPosition())){
+                    System.out.println("Enemy is destroyed");
+                    e.dispose();
+                    enemies.remove(e);
+                    numEnemies--;
+                    you.bulletManager.get(j).dispose();
+                    you.bulletManager.remove(j);
+                    j--;
+                }
+            }
         }
 
         // If your health is 0, go back to title screen
         if (you.health <= 0) game.gameOver();
+
+        //Add pause button (temporary, will be improved later)
+        //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
+        game.batch.end();
+
+
     }
 
     @Override

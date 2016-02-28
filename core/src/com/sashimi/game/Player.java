@@ -13,6 +13,8 @@ public class Player extends Entity {
     public int health = 10;
     public Bullet bullet;
     private int moveSpeed = 10;
+    public double startTime = 0;
+    public double totalPlayTime = 0;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 
@@ -97,4 +99,5 @@ public class Player extends Entity {
 
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
+
 }

@@ -13,6 +13,7 @@ public class Entity {
     final GameScreen screen;
     final protected Rectangle position;
     final Texture texture;
+    public int health;
 
     Entity(GameScreen screen, int x, int y, String textureName){
         texture = new Texture(Gdx.files.internal(textureName));

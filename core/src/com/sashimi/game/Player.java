@@ -10,9 +10,10 @@ import java.util.ArrayList;
 public class Player extends Entity {
     private OrthographicCamera camera;
     private float fireDelay;
-    public int health = 10;
     public Bullet bullet;
     private int moveSpeed = 10;
+    public double startTime = 0;
+    public double totalPlayTime = 0;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 
@@ -20,6 +21,7 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
+        health = 10;
     }
 
     public void update() {
@@ -97,4 +99,5 @@ public class Player extends Entity {
 
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
+
 }

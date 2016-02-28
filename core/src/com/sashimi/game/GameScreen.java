@@ -79,29 +79,35 @@ public class GameScreen implements Screen {
             //If you are hit by an enemy
             if(e.isHit(you.getPosition())){
                 //System.out.println("You Were Hit By an Enemy");
-                e.dispose();
-                enemies.remove(e);
-                numEnemies--;
                 you.health--; // UNCOMMENT FOR INVINCIBILITY
                 System.out.println("Your HP: "+ you.health);
+                // If your health is 0, go back to title screen
+                if (you.health <= 0) game.gameOver();
+                if (e.health <= 0) {
+                    System.out.println("Enemy is destroyed");
+                    e.dispose();
+                    enemies.remove(e);
+                    numEnemies--;
+                }
             }
 
             //Handles Bullet Collisions
             for(int j=0; j<you.bulletManager.size(); j++){
                 if(e.isHit(you.bulletManager.get(j).getPosition())){
-                    System.out.println("Enemy is destroyed");
-                    e.dispose();
-                    enemies.remove(e);
-                    numEnemies--;
+                    e.health--;
                     you.bulletManager.get(j).dispose();
                     you.bulletManager.remove(j);
                     j--;
+                    if (e.health <= 0) {
+                        System.out.println("Enemy is destroyed");
+                        e.dispose();
+                        enemies.remove(e);
+                        you.totalPlayTime = System.currentTimeMillis() - you.startTime;
+                        numEnemies--;
+                    }
                 }
             }
         }
-
-        // If your health is 0, go back to title screen
-        if (you.health <= 0) game.gameOver();
 
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());

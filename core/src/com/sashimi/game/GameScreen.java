@@ -28,6 +28,10 @@ public class GameScreen implements Screen {
     protected int yourWidth = 30;
     protected int yourHeight = 50;
 
+    //Counter to determine end of level
+    protected int enemiesDestroyed = 0;
+    protected int maxEnemies = 5;
+
     public EasyButton pauseButton;
 
     public GameScreen(final Sashimi game) {
@@ -84,7 +88,7 @@ public class GameScreen implements Screen {
                 // If your health is 0, go back to title screen
                 if (you.health <= 0) game.gameOver();
                 if (e.health <= 0) {
-                    System.out.println("Enemy is destroyed");
+                    //System.out.println("Enemy is destroyed")
                     e.dispose();
                     enemies.remove(e);
                     numEnemies--;
@@ -99,6 +103,7 @@ public class GameScreen implements Screen {
                     you.bulletManager.remove(j);
                     j--;
                     if (e.health <= 0) {
+                        enemiesDestroyed++;
                         System.out.println("Enemy is destroyed");
                         e.dispose();
                         enemies.remove(e);
@@ -112,6 +117,10 @@ public class GameScreen implements Screen {
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
+
+        if(enemiesDestroyed >= maxEnemies){
+            game.level1Boss();
+        }
 
 
     }
@@ -145,6 +154,9 @@ public class GameScreen implements Screen {
         BG.dispose();
         for(Enemy e: enemies){
             e.dispose();
+        }
+        for(Bullet b: you.bulletManager){
+            b.dispose();
         }
     }
 }

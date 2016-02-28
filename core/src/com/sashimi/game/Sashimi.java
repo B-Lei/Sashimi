@@ -55,6 +55,12 @@ public class Sashimi extends Game {
         font.dispose();
     }
 
+    public void level1Boss(){
+        System.out.println("Disposing of main menu screen");
+        screen.dispose();
+        setScreen(new BossScreen(this));
+    }
+
     public void level1(){
         System.out.println("Disposing of main menu screen");
         screen.dispose();

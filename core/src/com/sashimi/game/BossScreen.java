@@ -12,15 +12,13 @@ public class BossScreen extends GameScreen {
         super(game);
         this.game = game;
 
-        //Render Static Images
-        game.batch.begin();
-        game.batch.draw(BG, 0, 0, game.screenWidth, game.screenHeight);
-        game.batch.end();
     }
 
     @Override
     public void render(float delta){
-
+        game.batch.begin();
+        game.batch.draw(BG, 0, 0, game.screenWidth, game.screenHeight);
+        game.batch.end();
     }
 
     @Override

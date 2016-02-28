@@ -92,12 +92,6 @@ public class GameScreen implements Screen {
 
         // If your health is 0, go back to title screen
         if (you.health <= 0) game.gameOver();
-
-        // Keeps you in the game's boundaries
-        if(you.getPosition().x < 0) you.setX(0);
-        if(you.getPosition().x > game.screenWidth - yourWidth) you.getPosition().x = game.screenWidth-yourHeight;
-        if(you.getPosition().y < 0) you.setY(0);
-        if(you.getPosition().y > game.screenHeight - yourHeight) you.setY(game.screenHeight-yourHeight);
     }
 
     @Override

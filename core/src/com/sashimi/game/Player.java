@@ -53,11 +53,17 @@ public class Player extends Entity {
             position.x = touchPos.x - position.getWidth() / 2;
             position.y = touchPos.y - position.getHeight() / 2 + 150;
         }
-
+        // Keboard input
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 800 * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 800 * Gdx.graphics.getDeltaTime();
+
+        // Keeps you in the game's boundaries
+        if(position.x < 0) position.x = 0;
+        if(position.x > screen.game.screenWidth - position.getWidth()) position.x = screen.game.screenWidth-position.getWidth();
+        if(position.y < 0) position.y = 0;
+        if(position.y > screen.game.screenHeight - position.getHeight()) position.y = screen.game.screenHeight-position.getHeight();
     }
 
     void render(float deltaTime){

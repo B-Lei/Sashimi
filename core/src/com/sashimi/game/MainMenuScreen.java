@@ -55,7 +55,12 @@ public class MainMenuScreen implements Screen {
             int x = Gdx.input.getX();
             int y = Gdx.input.getY();
 
+            System.out.println("Screen touched! X: " + x + " Y: " + y);
+
             //Checks if the play button is touched
+
+            System.out.println("Infobutton coords - X: " + infoButton.getX() + " Y: " + infoButton.getY());
+
             if(playButton.contains(x,y,game.screenHeight)){
                 game.level1();
             }

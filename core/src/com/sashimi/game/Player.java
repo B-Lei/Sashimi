@@ -33,8 +33,8 @@ public class Player extends Entity {
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
 
-            // Added some value to y to position fish above finger
-            if(position.x < touchPos.x) {
+            // NEW IMPLEMENTATION
+            /*if(position.x < touchPos.x) {
                 position.x += moveSpeed;
             }
             else if(position.x > touchPos.x+10) {
@@ -46,7 +46,12 @@ public class Player extends Entity {
             }
             else if (position.y > touchPos.y+10){
                 position.y -= moveSpeed;
-            }
+            }*/
+
+            // OLD IMPLEMENTATION
+            // Added some value to y to position fish above finger
+            position.x = touchPos.x - position.getWidth() / 2;
+            position.y = touchPos.y - position.getHeight() / 2 + 150;
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 800 * Gdx.graphics.getDeltaTime();

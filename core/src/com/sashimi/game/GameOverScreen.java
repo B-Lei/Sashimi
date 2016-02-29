@@ -48,7 +48,7 @@ public class GameOverScreen implements Screen {
         game.batch.end();
 
         //In the event that screen is touched
-        if(Gdx.input.isTouched()){
+        if(Gdx.input.justTouched()){
             int x = Gdx.input.getX();
             int y = Gdx.input.getY();
 

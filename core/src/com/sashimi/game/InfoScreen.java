@@ -77,7 +77,7 @@ public class InfoScreen implements Screen {
         game.batch.end();
 
         //Check if user touches the screen
-        if(Gdx.input.isTouched()) {
+        if(Gdx.input.justTouched()) {
             int x = Gdx.input.getX();
             int y = Gdx.input.getY();
 

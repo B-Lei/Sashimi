@@ -26,13 +26,10 @@ public class Player extends Entity {
         health = 5;
     }
 
-    public void update() {
+    public void update(float deltaTime) {
         screen.game.batch.setProjectionMatrix(camera.combined);
 
         if (Gdx.input.isTouched()) {
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
-
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
@@ -71,7 +68,7 @@ public class Player extends Entity {
     }
 
     void render(float deltaTime){
-        update();
+        update(deltaTime);
         camera.update();
 
         if (health > 0) {

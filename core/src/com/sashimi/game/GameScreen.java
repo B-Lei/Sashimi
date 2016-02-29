@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
         this.game = game;
         BG = new Texture(Gdx.files.internal("BG/BG1.png"));
         you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
-        you.startTime = System.currentTimeMillis();
+
         //Set up menu button
         /*pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
                     System.out.println("Enemy is destroyed");
                     e.dispose();
                     enemies.remove(e);
-                    you.totalPlayTime = System.currentTimeMillis() - you.startTime;
+                    you.setScore(System.currentTimeMillis());
                     numEnemies--;
                     you.bulletManager.get(j).dispose();
                     you.bulletManager.remove(j);
@@ -102,7 +102,10 @@ public class GameScreen implements Screen {
         }
 
         // If your health is 0, go back to title screen
-        if (you.health <= 0) game.gameOver();
+        if (you.health <= 0){
+            System.out.println("Score: "+you.getScore());
+            game.gameOver();
+        }
 
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());

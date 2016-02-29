@@ -3,6 +3,7 @@ package com.sashimi.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ public class Player extends Entity {
     private OrthographicCamera camera;
     private float fireDelay;
     public Bullet bullet;
-    private int moveSpeed = 10;
+    private int moveSpeed = 1500;
+    private Vector2 velocity;
     public double prevHitTime = 0;
     private int score;
     public int enemiesHit;
@@ -20,9 +22,10 @@ public class Player extends Entity {
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
 
     public Player(GameScreen screen, int x, int y, String textureName) {
-        super(screen, x, y, "Players/"+textureName);
+        super(screen, x, y, "Players/" + textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
+        velocity = new Vector2(0,0);
         health = 5;
     }
 
@@ -49,16 +52,24 @@ public class Player extends Entity {
                 position.y -= moveSpeed;
             }*/
 
-            // OLD IMPLEMENTATION
-            // Added some value to y to position fish above finger
-            position.x = touchPos.x - position.getWidth() / 2;
-            position.y = touchPos.y - position.getHeight() / 2 + 150;
+            // Find the direction and length to move in
+            velocity.x = (touchPos.x - position.x);
+            velocity.y = (touchPos.y - position.y);
+            // if (Math.abs(velocity.x) >= 10 || Math.abs(velocity.y) >= 10) { // Forcibly removes jitter
+
+                // normalizes the above vector distance to obtain hypotenuse of 1, then multiplies by speed scalar
+                velocity = velocity.nor().scl(moveSpeed);
+
+                // Set add that direction and length to current position
+                position.x += (velocity.x) * deltaTime;
+                position.y += (velocity.y) * deltaTime;
+            //}
         }
         // Keboard input
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 800 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 800 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= 900 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += 900 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += 900 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) position.y -= 900 * Gdx.graphics.getDeltaTime();
 
         // Keeps you in the game's boundaries
         if(position.x < 0) position.x = 0;

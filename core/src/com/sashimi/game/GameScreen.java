@@ -118,8 +118,6 @@ public class GameScreen implements Screen {
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());
         game.batch.end();
-
-        System.out.println("Delta: " + delta);
     }
 
     @Override

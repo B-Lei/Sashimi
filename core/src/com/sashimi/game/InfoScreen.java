@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.awt.Dialog;
 
-//import javafx.stage.Stage;
+import javafx.stage.Stage;
 
 public class InfoScreen implements Screen {
 

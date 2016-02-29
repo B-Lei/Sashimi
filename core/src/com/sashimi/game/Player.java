@@ -30,29 +30,24 @@ public class Player extends Entity {
         health = 5;
     }
 
-    public void update(float deltaTime) {
-        screen.game.batch.setProjectionMatrix(camera.combined);
-
+    public void update() {
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
 
             // Find the direction and length to move in
-            velocity.x = (touchPos.x - position.x);
-            velocity.y = (touchPos.y - position.y);
+            velocity.x = (touchPos.x - position.x) - position.getWidth() / 2;
+            velocity.y = (touchPos.y - position.y) - position.getHeight() + 175;
 
-            // Forcibly removes jitter - not an ideal fix
-            // if (Math.abs(velocity.x) >= 10 || Math.abs(velocity.y) >= 10) {
+            // normalizes the above vector distance to obtain hypotenuse of 1, then multiplies by speed scalar
+            velocity = velocity.nor().scl(touchMoveSpeed);
 
-                // normalizes the above vector distance to obtain hypotenuse of 1, then multiplies by speed scalar
-                velocity = velocity.nor().scl(touchMoveSpeed);
-
-                // Set add that direction and length to current position
-                position.x += (velocity.x) * deltaTime;
-                position.y += (velocity.y) * deltaTime;
-            //}
+            // Set add that direction and length to current position
+            position.x += (velocity.x) * Gdx.graphics.getDeltaTime();
+            position.y += (velocity.y) * Gdx.graphics.getDeltaTime();
         }
+
         // Keboard input
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= keyMoveSpeed * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += keyMoveSpeed * Gdx.graphics.getDeltaTime();
@@ -67,8 +62,11 @@ public class Player extends Entity {
     }
 
     void render(float deltaTime){
-        update(deltaTime);
+        // Cool, makes the camera follow the fish
+        // camera.position.set(position.x, position.y, 0);
+        update();
         camera.update();
+        screen.game.batch.setProjectionMatrix(camera.combined);
 
         if (health > 0) {
             fireDelay -= deltaTime;

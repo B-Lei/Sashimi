@@ -15,16 +15,16 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class GameScreen implements Screen {
     final Sashimi game;
 
-    private Texture BG;
+    protected Texture BG;
     public int BGwidth = 720;
     public int BGheight = 1280;
     private Rectangle water;
 
-    private Vector<Enemy> enemies = new Vector<Enemy>();
+    protected Vector<Enemy> enemies = new Vector<Enemy>();
     private float enemySpawnDelay;
     private int numEnemies;
 
-    private Player you;
+    protected Player you;
     private int yourWidth = 30;
     private int yourHeight = 50;
 
@@ -79,24 +79,32 @@ public class GameScreen implements Screen {
             //If you are hit by an enemy
             if(e.isHit(you.getPosition())){
                 //System.out.println("You Were Hit By an Enemy");
-                e.dispose();
-                enemies.remove(e);
-                numEnemies--;
                 you.health--; // UNCOMMENT FOR INVINCIBILITY
+                e.health--;
                 System.out.println("Your HP: "+ you.health);
-            }
-
-            //Handles Bullet Collisions
-            for(int j=0; j<you.bulletManager.size(); j++){
-                if(e.isHit(you.bulletManager.get(j).getPosition())){
+                if (e.health <= 0) {
                     System.out.println("Enemy is destroyed");
                     e.dispose();
                     enemies.remove(e);
                     you.setScore(System.currentTimeMillis());
                     numEnemies--;
+                }
+            }
+
+            //Handles Bullet Collisions
+            for(int j=0; j<you.bulletManager.size(); j++){
+                if(e.isHit(you.bulletManager.get(j).getPosition())){
+                    e.health--;
                     you.bulletManager.get(j).dispose();
                     you.bulletManager.remove(j);
                     j--;
+                    if (e.health <= 0) {
+                        System.out.println("Enemy is destroyed");
+                        e.dispose();
+                        enemies.remove(e);
+                        you.setScore(System.currentTimeMillis());
+                        numEnemies--;
+                    }
                 }
             }
         }

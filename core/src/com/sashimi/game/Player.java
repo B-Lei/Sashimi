@@ -23,7 +23,7 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
-        health = 10;
+        health = 5;
     }
 
     public void update() {

@@ -15,7 +15,7 @@ public class Enemy extends Entity {
         super(screen,x,y,"Enemies/"+textureName);
         targetX = 70;
         targetY = 70;
-        health = 2;
+        health = 1; // Default health
     }
 
 

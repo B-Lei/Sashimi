@@ -24,8 +24,6 @@ public class Entity {
     Entity(GameScreen screen, int x, int y, String textureName){
         texture = new Texture(Gdx.files.internal(textureName));
         position = new Rectangle(x,y,texture.getWidth(),texture.getHeight());
-        position.setX(x);
-        position.setY(y);
         this.screen = screen;
     }
 
@@ -76,7 +74,7 @@ public class Entity {
         return (position.contains(x, y));
     }
 
-    void render(float deltaTime){
+    void render(){
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
 

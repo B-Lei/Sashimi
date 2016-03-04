@@ -25,6 +25,7 @@ public class GameScreen implements Screen {
     private int numEnemies;
     ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
     private Bullet savedBullet;
+    private int justOnce = 0;
 
     protected Player you;
     private int yourWidth = 30;
@@ -36,6 +37,11 @@ public class GameScreen implements Screen {
         this.game = game;
         BG = new Texture(Gdx.files.internal("BG/BG1.png"));
         you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
+        System.out.println("Width: " + you.getPosition().getX());
+        System.out.println("Height: " + you.getPosition().getY());
+        Vector2 spriteDimensions = new Vector2(0,0);
+        System.out.println("Center Width: " + you.getPosition().getCenter(spriteDimensions).x);
+        System.out.println("Center Height: " + you.getPosition().getCenter(spriteDimensions).y);
 
         //Set up menu button
         /*pauseButton = new EasyButton("Pause.png");
@@ -61,7 +67,7 @@ public class GameScreen implements Screen {
                 if (enemySpawnDelay <= 0) {
                     int randomDeterminant = random(1);
                     String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
-                    Enemy tempEnemy = new Enemy(this, random(720), game.screenHeight, randomEnemy);
+                    RandomEnemy tempEnemy = new RandomEnemy(this, random(720), game.screenHeight, randomEnemy);
                     enemies.add(tempEnemy);
                     enemySpawnDelay += 1;
                     numEnemies++;
@@ -72,7 +78,7 @@ public class GameScreen implements Screen {
         // Render enemies
         for(Enemy e: enemies) {
             if (e != null) {
-                e.render(delta);
+                e.render();
                 e.fireBullet(delta, enemyBulletManager);
             }
         }
@@ -93,9 +99,7 @@ public class GameScreen implements Screen {
         // Handles enemy collisions
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
-            //If you are hit by an enemy
-            if(e.isHit(you.getPosition())){
-                //System.out.println("You Were Hit By an Enemy");
+            if(e.isHit(you.getHitbox())){
                 you.health--; // UNCOMMENT FOR INVINCIBILITY
                 e.health--;
                 System.out.println("Your HP: "+ you.health);

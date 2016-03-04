@@ -1,14 +1,14 @@
 package com.sashimi.game;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -23,6 +23,8 @@ public class GameScreen implements Screen {
     protected Vector<Enemy> enemies = new Vector<Enemy>();
     private float enemySpawnDelay;
     private int numEnemies;
+    ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
+    private Bullet savedBullet;
 
     protected Player you;
     private int yourWidth = 30;
@@ -61,7 +63,7 @@ public class GameScreen implements Screen {
                     String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
                     Enemy tempEnemy = new Enemy(this, random(720), game.screenHeight, randomEnemy);
                     enemies.add(tempEnemy);
-                    enemySpawnDelay += 0.5;
+                    enemySpawnDelay += 1;
                     numEnemies++;
                 }
             }
@@ -69,11 +71,26 @@ public class GameScreen implements Screen {
 
         // Render enemies
         for(Enemy e: enemies) {
-            if (e != null)
-                e.render();
+            if (e != null) {
+                e.render(delta);
+                e.fireBullet(delta, enemyBulletManager);
+            }
         }
 
-        // Handles enemy collisions - why doesn't bullet destroy the enemy?
+        // Render enemy bullets
+        for (int i=0; i<enemyBulletManager.size(); i++) {
+            savedBullet = enemyBulletManager.get(i);
+            savedBullet.update();
+            if(savedBullet.bulletLocation.x > -30 && savedBullet.bulletLocation.x < game.screenWidth && savedBullet.bulletLocation.y > 0 && savedBullet.bulletLocation.y < game.screenHeight)
+                game.batch.draw(savedBullet.texture, savedBullet.bulletLocation.x, savedBullet.bulletLocation.y);
+            else {
+                enemyBulletManager.remove(i);
+                if(enemyBulletManager.size() > 0)
+                    i--;
+            }
+        }
+
+        // Handles enemy collisions
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
             //If you are hit by an enemy
@@ -92,7 +109,8 @@ public class GameScreen implements Screen {
             }
 
             //Handles Bullet Collisions
-            for(int j=0; j<you.bulletManager.size(); j++){
+            // From your bullets:
+            for(int j=0; j< you.bulletManager.size(); j++){
                 if(e.isHit(you.bulletManager.get(j).getPosition())){
                     e.health--;
                     you.bulletManager.get(j).dispose();
@@ -105,6 +123,16 @@ public class GameScreen implements Screen {
                         you.setScore(System.currentTimeMillis());
                         numEnemies--;
                     }
+                }
+            }
+            // For enemy bullets:
+            for(int j=0; j< enemyBulletManager.size(); j++){
+                if(you.isHit(enemyBulletManager.get(j).getPosition())){
+                    you.health--;
+                    System.out.println("Your HP: "+ you.health);
+                    enemyBulletManager.get(j).dispose();
+                    enemyBulletManager.remove(j);
+                    j--;
                 }
             }
         }

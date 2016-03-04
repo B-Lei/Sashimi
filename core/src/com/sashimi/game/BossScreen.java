@@ -19,9 +19,9 @@ public class BossScreen extends GameScreen {
     public void render(float delta){
         game.batch.begin();
         game.batch.draw(BG, 0, 0, game.screenWidth, game.screenHeight);
-        you.render();
+        you.render(delta);
         for(Enemy e: enemies){
-            e.render();
+            e.render(delta);
         }
         game.batch.end();
     }

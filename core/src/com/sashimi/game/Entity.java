@@ -1,8 +1,11 @@
 package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+
+import java.util.ArrayList;
 
 /**
  * Basic Class to quickly generate and render sprites for a game
@@ -14,6 +17,9 @@ public class Entity {
     final protected Rectangle position;
     final Texture texture;
     public int health;
+    protected int bulletVelocity;
+    protected float fireDelay;
+    protected boolean firesBullets;
 
     Entity(GameScreen screen, int x, int y, String textureName){
         texture = new Texture(Gdx.files.internal(textureName));
@@ -70,16 +76,11 @@ public class Entity {
         return (position.contains(x, y));
     }
 
-
-    void render(){
+    void render(float deltaTime){
         screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
 
     void dispose(){
         texture.dispose();
     }
-
-
-
-
 }

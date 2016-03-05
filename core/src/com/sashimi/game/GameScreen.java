@@ -16,25 +16,24 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class GameScreen implements Screen {
     final Sashimi game;
 
+    private float gameTime = 0;
+    private int justOnce = 0;
+
     protected Texture BG;
     public int BGwidth = 720;
     public int BGheight = 1280;
-    private Rectangle water;
-
-    protected Vector<Enemy> enemies = new Vector<Enemy>();
-    private float enemySpawnDelay;
-    private int numEnemies;
-    ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
-    private Bullet savedBullet;
-    private int justOnce = 0;
 
     protected Player you;
-    private int yourWidth = 30;
-    private int yourHeight = 50;
+
+    protected Vector<Enemy> enemies = new Vector<Enemy>();
+    ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
+    private float enemySpawnDelay;
+    private int numEnemies;
 
     public EasyButton pauseButton;
 
     public GameScreen(final Sashimi game) {
+        int yourWidth = 30;
         this.game = game;
         BG = new Texture(Gdx.files.internal("BG/BG1.png"));
         you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
@@ -51,42 +50,46 @@ public class GameScreen implements Screen {
         */
     }
 
-    @Override
-    public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    public void updateGameTime (float deltaTime) {
+        gameTime += deltaTime;
+    }
 
-        game.batch.begin();
-        game.batch.draw(BG, 0, 0, BGwidth, BGheight);
-
-        you.render(delta);
+    public void spawnEnemies (float deltaTime) {
+        // Example of a time-spawned enemy
+        if (gameTime > 2 && justOnce == 0) {
+            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
+            enemies.add(tempEnemy);
+            numEnemies++;
+            justOnce = 1;
+        }
 
         // Spawn random enemies up until 20
         if (numEnemies < 20) {
             if (you.health > 0) {
-                enemySpawnDelay -= delta;
+                enemySpawnDelay -= deltaTime;
                 if (enemySpawnDelay <= 0) {
                     int randomDeterminant = random(1);
                     String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
                     RandomEnemy tempEnemy = new RandomEnemy(this, random(720), game.screenHeight, randomEnemy);
                     enemies.add(tempEnemy);
-                    enemySpawnDelay += 1;
+                    enemySpawnDelay += 0.3;
                     numEnemies++;
                 }
             }
         }
+    }
 
-        // Render enemies
+    public void renderEnemiesAndBullets (float deltaTime) {
+        // Renders enemies
         for(Enemy e: enemies) {
             if (e != null) {
                 e.render();
-                e.fireBullet(delta, enemyBulletManager);
+                e.fireBullet(deltaTime, enemyBulletManager);
             }
         }
-
         // Render enemy bullets
         for (int i=0; i<enemyBulletManager.size(); i++) {
-            savedBullet = enemyBulletManager.get(i);
+            Bullet savedBullet = enemyBulletManager.get(i);
             savedBullet.update();
             if(savedBullet.bulletLocation.x > -30 && savedBullet.bulletLocation.x < game.screenWidth && savedBullet.bulletLocation.y > 0 && savedBullet.bulletLocation.y < game.screenHeight)
                 game.batch.draw(savedBullet.texture, savedBullet.bulletLocation.x, savedBullet.bulletLocation.y);
@@ -96,7 +99,9 @@ public class GameScreen implements Screen {
                     i--;
             }
         }
+    }
 
+    public void checkForCollisions (float deltaTime) {
         // Handles enemy collisions
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
@@ -141,12 +146,34 @@ public class GameScreen implements Screen {
                 }
             }
         }
+    }
 
+    public void checkPlayerHealth () {
         // If your health is 0, go back to title screen
         if (you.health <= 0){
             System.out.println("Score: "+you.getScore());
             game.gameOver();
         }
+    }
+
+    @Override
+    public void render (float delta) {
+        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.batch.begin();
+        game.batch.draw(BG, 0, 0, BGwidth, BGheight);
+
+        updateGameTime(delta);
+
+        you.render(delta);
+
+        spawnEnemies(delta);
+        renderEnemiesAndBullets(delta);
+
+        checkForCollisions(delta);
+
+        checkPlayerHealth();
 
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());

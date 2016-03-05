@@ -27,7 +27,7 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
-        hitboxTexture = new Texture(Gdx.files.internal("Players/hitbox2.png"));
+        hitboxTexture = new Texture(Gdx.files.internal("Players/hitbox.png"));
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
         velocity = new Vector2(0,0);
         health = 5;
@@ -38,8 +38,20 @@ public class Player extends Entity {
     public Rectangle getHitbox() { return hitbox; }
 
     @Override
-    public boolean isHit(int x, int y) {
-        return (hitbox.contains(x, y));
+    boolean isHit(Rectangle other){
+        if(hitbox.contains(other.getX(),other.getY())){
+            return true;
+        }
+        else if(hitbox.contains(other.getX(),(other.getY() + other.getHeight()))){
+            return true;
+        }
+        else if(hitbox.contains(other.getX() + other.getWidth(),other.getY() )){
+            return true;
+        }
+        else if(hitbox.contains(other.getX() + other.getWidth(),other.getY()+other.getHeight())){
+            return true;
+        }
+        return false;
     }
 
     public void setScore(double currentTime){
@@ -65,9 +77,43 @@ public class Player extends Entity {
         if (health > 0 && firesBullets) {
             fireDelay -= deltaTime;
             if(fireDelay <= 0) {
-                Bullet tempBullet = new Bullet(screen, (int) (position.x + texture.getWidth()/4), (int) (position.y + texture.getHeight() / 2), "bubble.png", bulletVelocity);
+                Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
+                bulletManager.add(tempBullet);
+                Vector2 newVelocity = new Vector2(7,19);
+                tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", newVelocity);
+                bulletManager.add(tempBullet);
+                newVelocity = new Vector2(-7,19);
+                tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", newVelocity);
                 bulletManager.add(tempBullet);
                 fireDelay += 0.2;
+            }
+        }
+    }
+
+    public void fireBullet2 (float deltaTime) {
+        if (health > 0 && firesBullets) {
+            fireDelay -= deltaTime;
+            if(fireDelay <= 0) {
+                Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
+                bulletManager.add(tempBullet);
+                fireDelay += 0.1;
+            }
+        }
+    }
+
+    public void renderBullets () {
+        // Renders bullets
+        for (int i=0; i<bulletManager.size(); i++) {
+            bullet = bulletManager.get(i);
+            bullet.update();
+            // Saves memory by removing bullets that are out of bounds
+            // Note: Changed to -30 for overlap of rectangle and boundary
+            if(bullet.bulletLocation.x > -30 && bullet.bulletLocation.x < screen.game.screenWidth && bullet.bulletLocation.y > 0 && bullet.bulletLocation.y < screen.game.screenHeight)
+                screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
+            else {
+                bulletManager.remove(i);
+                if(bulletManager.size() > 0)
+                    i--;
             }
         }
     }
@@ -89,7 +135,12 @@ public class Player extends Entity {
             position.y += (velocity.y) * Gdx.graphics.getDeltaTime();
         }
 
-        // Keboard input
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+            keyMoveSpeed = 400;
+        else
+            keyMoveSpeed = 700;
+
+        // Keyboard input
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= keyMoveSpeed * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) position.x += keyMoveSpeed * Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) position.y += keyMoveSpeed * Gdx.graphics.getDeltaTime();
@@ -116,20 +167,11 @@ public class Player extends Entity {
 
         screen.game.batch.draw(hitboxTexture, hitbox.x, hitbox.y, hitbox.getWidth(), hitbox.getHeight());
 
-        fireBullet(deltaTime);
-        // Renders bullets
-        for (int i=0; i<bulletManager.size(); i++) {
-            bullet = bulletManager.get(i);
-            bullet.update();
-            // Saves memory by removing bullets that are out of bounds
-            // Note: Changed to -30 for overlap of rectangle and boundary
-            if(bullet.bulletLocation.x > -30 && bullet.bulletLocation.x < screen.game.screenWidth && bullet.bulletLocation.y > 0 && bullet.bulletLocation.y < screen.game.screenHeight)
-                screen.game.batch.draw(bullet.texture, bullet.bulletLocation.x, bullet.bulletLocation.y);
-            else {
-                bulletManager.remove(i);
-                if(bulletManager.size() > 0)
-                    i--;
-            }
-        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            fireBullet2(deltaTime);
+        else
+            fireBullet(deltaTime);
+
+        renderBullets();
     }
 }

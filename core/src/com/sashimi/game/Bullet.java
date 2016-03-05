@@ -12,6 +12,16 @@ public class Bullet extends Entity {
         bulletVelocity = new Vector2(0,velocity);
     }
 
+    public Bullet(GameScreen screen, int x, int y, String textureName, Vector2 velocity) {
+        super(screen, x, y, "Bullets/"+textureName);
+        bulletLocation = new Vector2(x,y);
+        bulletVelocity = velocity;
+    }
+
+    public void setVelocity (float x, float y) {
+        bulletVelocity.set(x, y);
+    }
+
     public void update() {
         bulletLocation.x += bulletVelocity.x;
         bulletLocation.y += bulletVelocity.y;

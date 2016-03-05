@@ -7,16 +7,13 @@ import java.util.Random;
  * Class for Enemy Creation and AI
  */
 public class Enemy extends Entity {
-    protected int targetX;
-    protected int targetY;
     protected int moveSpeed = 7;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,"Enemies/"+textureName);
-        targetX = 70;
-        targetY = 70;
         health = 1; // Default health
-        bulletVelocity = -10;
+        bulletVelocity = -10; // Default velocity
+        firesBullets = true;
     }
 
     // The below actually just adds bullets to an external bulletManager (from the game screen)
@@ -25,9 +22,9 @@ public class Enemy extends Entity {
         if (health > 0 && firesBullets) {
             fireDelay -= deltaTime;
             if(fireDelay <= 0) {
-                Bullet tempBullet = new Bullet(screen, (int) (position.x + texture.getWidth()/4), (int) (position.y + texture.getHeight() / 2), "enemyBubble.png", bulletVelocity);
+                Bullet tempBullet = new Bullet(screen, (int)(position.x+position.getHeight()/4), (int)(position.y-position.getHeight()/4), "enemyBubble.png", bulletVelocity);
                 bulletManager.add(tempBullet);
-                fireDelay += 0.6;
+                fireDelay += 0.3;
             }
         }
     }

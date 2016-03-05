@@ -6,13 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 public class BossScreen extends GameScreen {
     final Sashimi game;
 
-
-
     BossScreen(final Sashimi game) {
         super(game);
         this.game = game;
         enemies.add(new Level1Boss(this,500,500));
-
     }
 
     @Override

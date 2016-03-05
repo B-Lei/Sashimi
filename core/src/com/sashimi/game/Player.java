@@ -27,7 +27,7 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
-        hitboxTexture = new Texture(Gdx.files.internal("Players/hitbox2.PNG"));
+        hitboxTexture = new Texture(Gdx.files.internal("Players/hitbox2.png"));
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
         velocity = new Vector2(0,0);
         health = 5;
@@ -79,8 +79,7 @@ public class Player extends Entity {
             camera.unproject(touchPos);
 
             // Find the direction and length to move in
-            velocity.x = (touchPos.x - position.x) - position.getWidth() / 2;
-            velocity.y = (touchPos.y - position.y) - position.getHeight() + 175;
+            velocity.set(((touchPos.x - position.x) - position.getWidth() / 2), ((touchPos.y - position.y) - position.getHeight() + 200));
 
             // normalizes the above vector distance to obtain hypotenuse of 1, then multiplies by speed scalar
             velocity = velocity.nor().scl(touchMoveSpeed);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 public class GameOverScreen implements Screen {
 
@@ -49,15 +50,16 @@ public class GameOverScreen implements Screen {
 
         //In the event that screen is touched
         if(Gdx.input.justTouched()){
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
 
             //Checks if the play button is touched
-            if(playButton.contains(x,y,game.screenHeight)){
+            if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
             }
             //Check if the info button is touched
-            else if(mainMenu.contains(x,y,game.screenHeight)){
+            else if(mainMenu.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.mainMenu();
             }
         }

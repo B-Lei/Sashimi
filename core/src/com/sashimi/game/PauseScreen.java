@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector3;
 
 //import javafx.scene.paint.Color;
 
@@ -62,14 +63,15 @@ public class PauseScreen implements Screen{
 
         //Check if user touches the screen
         if(Gdx.input.justTouched()) {
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
 
             //Checks if the menu button is touched
-            if(resumeButton.contains(x,y,game.screenHeight)){
+            if(resumeButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
             }
-            else if(menuButton.contains(x,y,game.screenHeight)){
+            else if(menuButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.mainMenu();
             }
 

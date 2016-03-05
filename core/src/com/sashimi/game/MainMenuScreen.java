@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 
 public class MainMenuScreen implements Screen {
@@ -52,20 +53,21 @@ public class MainMenuScreen implements Screen {
 
         //In the event that screen is touched
         if(Gdx.input.justTouched()){
-            int x = Gdx.input.getX();
-            int y = Gdx.input.getY();
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
 
-            System.out.println("Screen touched! X: " + x + " Y: " + y);
+            System.out.println("Screen touched! X: " + touchPos.x + " Y: " + touchPos.y);
 
             //Checks if the play button is touched
 
             System.out.println("Infobutton coords - X: " + infoButton.getX() + " Y: " + infoButton.getY());
 
-            if(playButton.contains(x,y,game.screenHeight)){
+            if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
             }
             //Check if the info button is touched
-            else if(infoButton.contains(x,y,game.screenHeight)){
+            else if(infoButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.infoScreen();
             }
         }

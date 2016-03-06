@@ -55,13 +55,19 @@ public class GameScreen implements Screen {
     }
 
     public void spawnEnemies (float deltaTime) {
-        // Example of a time-spawned enemy
-        if (gameTime > 2 && justOnce == 0) {
-            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
-            enemies.add(tempEnemy);
-            numEnemies++;
-            justOnce = 1;
-        }
+        // Example of a time-spawned enemy - testing purposes
+//        if (gameTime > 2 && justOnce == 0) {
+//            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
+//            enemies.add(tempEnemy);
+//            numEnemies++;
+//            justOnce++;
+//        }
+//        if (gameTime > 3 && justOnce == 1) {
+//            Enemy tempEnemy = new Enemy(this, 200, 1000, "starfish1.5x.png");
+//            enemies.add(tempEnemy);
+//            numEnemies++;
+//            justOnce++;
+//        }
 
         // Spawn random enemies up until 20
         if (numEnemies < 20) {
@@ -106,11 +112,11 @@ public class GameScreen implements Screen {
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
             if(e.isHit(you.getHitbox())){
-                you.health--; // UNCOMMENT FOR INVINCIBILITY
+                you.health--; // COMMENT OUT FOR INVINCIBILITY
                 e.health--;
-                System.out.println("Your HP: "+ you.health);
+                System.out.println("Collided with Enemy. Your HP: "+ you.health);
                 if (e.health <= 0) {
-                    System.out.println("Enemy is destroyed");
+                    //System.out.println("Enemy is destroyed");
                     e.dispose();
                     enemies.remove(e);
                     you.setScore(System.currentTimeMillis());
@@ -120,14 +126,14 @@ public class GameScreen implements Screen {
 
             //Handles Bullet Collisions
             // From your bullets:
-            for(int j=0; j< you.bulletManager.size(); j++){
+            for(int j=0; j<you.bulletManager.size(); j++){
                 if(e.isHit(you.bulletManager.get(j).getPosition())){
                     e.health--;
                     you.bulletManager.get(j).dispose();
                     you.bulletManager.remove(j);
                     j--;
                     if (e.health <= 0) {
-                        System.out.println("Enemy is destroyed");
+                        //System.out.println("Enemy is destroyed");
                         e.dispose();
                         enemies.remove(e);
                         you.setScore(System.currentTimeMillis());
@@ -136,10 +142,10 @@ public class GameScreen implements Screen {
                 }
             }
             // For enemy bullets:
-            for(int j=0; j< enemyBulletManager.size(); j++){
+            for(int j=0; j<enemyBulletManager.size(); j++){
                 if(you.isHit(enemyBulletManager.get(j).getPosition())){
-                    you.health--;
-                    System.out.println("Your HP: "+ you.health);
+                    you.health--; // COMMENT OUT FOR INVINCIBILITY
+                    System.out.println("Hit by Bullet. Your HP: "+ you.health);
                     enemyBulletManager.get(j).dispose();
                     enemyBulletManager.remove(j);
                     j--;

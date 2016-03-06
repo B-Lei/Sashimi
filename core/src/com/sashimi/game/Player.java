@@ -27,10 +27,10 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
-        hitboxTexture = new Texture(Gdx.files.internal("Players/hitbox.png"));
+        hitboxTexture = new Texture(Gdx.files.internal("Players/smallerHitbox.png"));
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
         velocity = new Vector2(0,0);
-        health = 5;
+        health = 10000;
         bulletVelocity = 20;
         firesBullets = true;
     }
@@ -39,19 +39,7 @@ public class Player extends Entity {
 
     @Override
     boolean isHit(Rectangle other){
-        if(hitbox.contains(other.getX(),other.getY())){
-            return true;
-        }
-        else if(hitbox.contains(other.getX(),(other.getY() + other.getHeight()))){
-            return true;
-        }
-        else if(hitbox.contains(other.getX() + other.getWidth(),other.getY() )){
-            return true;
-        }
-        else if(hitbox.contains(other.getX() + other.getWidth(),other.getY()+other.getHeight())){
-            return true;
-        }
-        return false;
+        return hitbox.overlaps(other);
     }
 
     public void setScore(double currentTime){
@@ -67,8 +55,7 @@ public class Player extends Entity {
 
     // WIP
     public void invincible(float deltaTime) {
-        float deltaTimer = deltaTime;
-        while (deltaTimer - 5 < 0) {
+        while (deltaTime - 5 < 0) {
             return;
         }
     }

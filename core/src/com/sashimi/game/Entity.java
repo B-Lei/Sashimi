@@ -55,19 +55,7 @@ public class Entity {
 
     //Checks if the rectangle is touched by any other rectangle
     boolean isHit(Rectangle other){
-        if(position.contains(other.getX(),other.getY())){
-            return true;
-        }
-        else if(position.contains(other.getX(),(other.getY() + other.getHeight()))){
-            return true;
-        }
-        else if(position.contains(other.getX() + other.getWidth(),other.getY() )){
-            return true;
-        }
-        else if(position.contains(other.getX() + other.getWidth(),other.getY()+other.getHeight())){
-            return true;
-        }
-        return false;
+        return position.overlaps(other);
     }
 
     boolean isHit(int x, int y) {

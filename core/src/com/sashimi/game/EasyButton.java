@@ -4,12 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Gdx;
 
-/**
- * Generic class for rendering buttons outside of Actor
- */
-//This is just a simple class to provide quick generic button generation
-//For The contains function, MAKE SURE TO PASS RAW X AND Y along with SCREENHEIGHT
-    //contains shifts for the coordinate axes
 public class EasyButton extends Rectangle{
     private Texture buttonTexture;
 

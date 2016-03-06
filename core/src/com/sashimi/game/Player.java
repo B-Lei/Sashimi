@@ -61,29 +61,32 @@ public class Player extends Entity {
     }
 
     public void fireBullet (float deltaTime) {
-        if (health > 0 && firesBullets) {
-            fireDelay -= deltaTime;
-            if(fireDelay <= 0) {
-                Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
-                bulletManager.add(tempBullet);
-                Vector2 newVelocity = new Vector2(7,19);
-                tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", newVelocity);
-                bulletManager.add(tempBullet);
-                newVelocity = new Vector2(-7,19);
-                tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", newVelocity);
-                bulletManager.add(tempBullet);
-                fireDelay += 0.2;
+        // Hold SHIFT to go into focus shot mode
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            if (health > 0 && firesBullets) {
+                fireDelay -= deltaTime;
+                if(fireDelay <= 0) {
+                    Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
+                    bulletManager.add(tempBullet);
+                    fireDelay += 0.1;
+                }
             }
         }
-    }
-
-    public void fireBullet2 (float deltaTime) {
-        if (health > 0 && firesBullets) {
-            fireDelay -= deltaTime;
-            if(fireDelay <= 0) {
-                Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
-                bulletManager.add(tempBullet);
-                fireDelay += 0.1;
+        // Default shooting
+        else {
+            if (health > 0 && firesBullets) {
+                fireDelay -= deltaTime;
+                if (fireDelay <= 0) {
+                    Bullet tempBullet = new Bullet(screen, (int) (hitbox.x - hitbox.getWidth() / 2), (int) (hitbox.y - hitbox.getHeight() + position.getHeight() / 2), "bubble.png", bulletVelocity);
+                    bulletManager.add(tempBullet);
+                    Vector2 newVelocity = new Vector2(7, 19);
+                    tempBullet = new Bullet(screen, (int) (hitbox.x - hitbox.getWidth() / 2), (int) (hitbox.y - hitbox.getHeight() + position.getHeight() / 2), "bubble.png", newVelocity);
+                    bulletManager.add(tempBullet);
+                    newVelocity = new Vector2(-7, 19);
+                    tempBullet = new Bullet(screen, (int) (hitbox.x - hitbox.getWidth() / 2), (int) (hitbox.y - hitbox.getHeight() + position.getHeight() / 2), "bubble.png", newVelocity);
+                    bulletManager.add(tempBullet);
+                    fireDelay += 0.2;
+                }
             }
         }
     }
@@ -106,6 +109,8 @@ public class Player extends Entity {
     }
 
     public void update(float deltaTime) {
+
+        // Touch movement
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -136,10 +141,8 @@ public class Player extends Entity {
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-            keyMoveSpeed = 400;
-        else
-            keyMoveSpeed = 700;
+        // Hold CTRL to go into focus movement (keyboard only)
+        keyMoveSpeed = (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) ? 400 : 700;
 
         // Keyboard input
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= keyMoveSpeed * Gdx.graphics.getDeltaTime();
@@ -168,10 +171,7 @@ public class Player extends Entity {
 
         screen.game.batch.draw(hitboxTexture, hitbox.x, hitbox.y, hitbox.getWidth(), hitbox.getHeight());
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            fireBullet2(deltaTime);
-        else
-            fireBullet(deltaTime);
+        fireBullet(deltaTime);
 
         renderBullets();
     }

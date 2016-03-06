@@ -18,7 +18,7 @@ public class Player extends Entity {
     final Texture hitboxTexture;
     private int activeTouch = 0;
     private int touchMoveSpeed = 1500;
-    private int keyMoveSpeed = 700;
+    private int keyMoveSpeed = 600;
     private int playerSpacing = 150;
     private Vector2 velocity;
     public double prevHitTime = 0;
@@ -147,7 +147,7 @@ public class Player extends Entity {
         }
 
         // Hold CTRL to go into focus movement (keyboard only)
-        keyMoveSpeed = (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) ? 400 : 700;
+        keyMoveSpeed = (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) ? 350 : 600;
 
         // Keyboard input
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) position.x -= keyMoveSpeed * Gdx.graphics.getDeltaTime();

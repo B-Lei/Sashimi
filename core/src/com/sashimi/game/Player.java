@@ -18,6 +18,7 @@ public class Player extends Entity {
     final Texture hitboxTexture;
     private int touchMoveSpeed = 1500;
     private int keyMoveSpeed = 700;
+    private int playerSpacing = 150;
     private Vector2 velocity;
     public double prevHitTime = 0;
     private int score;
@@ -43,7 +44,6 @@ public class Player extends Entity {
     }
 
     public void setScore(double currentTime){
-
         double deltaTime = currentTime - prevHitTime;
         score = score + (int)(1000.0/(deltaTime));
         prevHitTime = currentTime;
@@ -105,21 +105,35 @@ public class Player extends Entity {
         }
     }
 
-    public void update() {
+    public void update(float deltaTime) {
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
 
-            // Find the direction and length to move in
-            velocity.set(((touchPos.x - position.x) - position.getWidth() / 2), ((touchPos.y - position.y) - position.getHeight() + 200));
+            // Find the vector to move along (x and y distances give direction and magnitude)
+            float xDistance = (touchPos.x - position.getWidth()/2) - position.x;
+            float yDistance = (touchPos.y + playerSpacing) - position.y;
+            velocity.set(xDistance, yDistance);
 
-            // normalizes the above vector distance to obtain hypotenuse of 1, then multiplies by speed scalar
+            // Normalizes the above vector distance to obtain hypotenuse of 1 (single unit), then multiplies by speed scalar
             velocity = velocity.nor().scl(touchMoveSpeed);
 
-            // Set add that direction and length to current position
-            position.x += (velocity.x) * Gdx.graphics.getDeltaTime();
-            position.y += (velocity.y) * Gdx.graphics.getDeltaTime();
+            float xTravelDistance = velocity.x * deltaTime;
+            float yTravelDistance = velocity.y * deltaTime;
+
+            // If the distance between Player and touchPos is smaller than the distance traveled in one time refresh,
+            // simply adding the velocity will cause the position to be overshot, causing it to overcompensate and therefore jitter.
+            // Therefore, in that case, simply snap the player to the touchPosition to prevent overcompensation.
+            if (Math.abs(xDistance) < Math.abs(xTravelDistance) || Math.abs(yDistance) < Math.abs(yTravelDistance)) {
+                position.x = touchPos.x - position.getWidth()/2;
+                position.y = touchPos.y + playerSpacing;
+            }
+            // Otherwise, add the travel components to current position
+            else {
+                position.x += xTravelDistance;
+                position.y += yTravelDistance;
+            }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
@@ -149,7 +163,7 @@ public class Player extends Entity {
         // Cool, makes the camera follow the fish
         // camera.position.set(position.x, position.y, 0);
         screen.game.batch.setProjectionMatrix(camera.combined);
-        update();
+        update(deltaTime);
         super.render();
 
         screen.game.batch.draw(hitboxTexture, hitbox.x, hitbox.y, hitbox.getWidth(), hitbox.getHeight());

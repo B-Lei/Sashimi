@@ -16,6 +16,7 @@ public class Player extends Entity {
     public Bullet bullet;
     final protected Rectangle hitbox;
     final Texture hitboxTexture;
+    private int activeTouch = 0;
     private int touchMoveSpeed = 1500;
     private int keyMoveSpeed = 700;
     private int playerSpacing = 150;
@@ -61,8 +62,12 @@ public class Player extends Entity {
     }
 
     public void fireBullet (float deltaTime) {
-        // Hold SHIFT to go into focus shot mode
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+        // Toggles on second finger tap
+        if (Gdx.input.isTouched(1) && activeTouch == 0) activeTouch = 1;
+        else if (Gdx.input.isTouched(1) && activeTouch == 1) activeTouch = 0;
+
+        // Hold SHIFT or tap with a second finger to go into focus shot mode
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || activeTouch == 1) {
             if (health > 0 && firesBullets) {
                 fireDelay -= deltaTime;
                 if(fireDelay <= 0) {

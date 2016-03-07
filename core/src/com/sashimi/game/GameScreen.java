@@ -214,6 +214,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
+        //TODO remove
+        //game.level1Boss();
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

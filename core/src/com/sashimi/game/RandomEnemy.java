@@ -3,7 +3,7 @@ package com.sashimi.game;
 import java.util.Random;
 
 public class RandomEnemy extends Enemy {
-    private Random random = new Random();
+    protected Random random = new Random();
     protected int targetX;
     protected int targetY;
 

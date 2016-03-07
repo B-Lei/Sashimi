@@ -37,6 +37,7 @@ public class Sashimi extends Game {
         //font = generator.generateFont(parameter);
         font = new BitmapFont();
         this.setScreen(new MainMenuScreen(this));
+
 	}
 
     // render method is where we draw the media elements of the game (that we created earlier)

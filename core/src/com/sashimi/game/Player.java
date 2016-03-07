@@ -40,7 +40,7 @@ public class Player extends Entity {
         hitboxTexture = new Texture(Gdx.files.internal("Players/smallerHitbox.png"));
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
         velocity = new Vector2(0,0);
-        health = 10000;
+        health = 5;
         bulletVelocity = 20;
         firesBullets = true;
     }

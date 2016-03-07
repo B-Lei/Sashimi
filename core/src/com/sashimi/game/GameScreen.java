@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
@@ -18,9 +19,11 @@ public class GameScreen implements Screen {
     protected float gameTime = 0;
     private int justOnce = 0;
 
-    protected Texture BG;
-    public int BGwidth = 720;
-    public int BGheight = 1280;
+    protected Texture BGtexture;
+    protected Rectangle BGposition;
+    protected Texture BGtexture2;
+    protected Rectangle BGposition2;
+    protected int scrollSpeed = 2; // must be a factor of screenHeight
 
     protected Player you;
 
@@ -43,14 +46,14 @@ public class GameScreen implements Screen {
     public GameScreen(final Sashimi game) {
         int yourWidth = 30;
         this.game = game;
-        BG = new Texture(Gdx.files.internal("BG/BG1.png"));
-        you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
-        System.out.println("Width: " + you.getPosition().getX());
-        System.out.println("Height: " + you.getPosition().getY());
-        Vector2 spriteDimensions = new Vector2(0,0);
-        System.out.println("Center Width: " + you.getPosition().getCenter(spriteDimensions).x);
-        System.out.println("Center Height: " + you.getPosition().getCenter(spriteDimensions).y);
 
+        BGtexture = new Texture(Gdx.files.internal("BG/BG1scrollable.png"));
+        BGposition = new Rectangle(0,0,BGtexture.getWidth(),BGtexture.getHeight());
+        BGtexture2 = new Texture(Gdx.files.internal("BG/BG1scrollable.png"));
+        BGposition2 = new Rectangle(0,game.screenHeight,BGtexture2.getWidth(),BGtexture2.getHeight());
+
+        you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
+        Vector2 spriteDimensions = new Vector2(0,0);
         //Set up menu button
         /*pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
@@ -202,15 +205,23 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void scrollBG() {
+        BGposition.y -= scrollSpeed;
+        BGposition2.y -= scrollSpeed;
+        if (BGposition.y == -game.screenHeight) BGposition.y = game.screenHeight;
+        if (BGposition2.y == -game.screenHeight) BGposition2.y = game.screenHeight;
+    }
+
     @Override
     public void render (float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(BG, 0, 0, BGwidth, BGheight);
-
+        game.batch.draw(BGtexture, BGposition.x, BGposition.y, BGposition.getWidth(), BGposition.getHeight());
+        game.batch.draw(BGtexture2, BGposition2.x, BGposition2.y, BGposition2.getWidth(), BGposition2.getHeight());
         updateGameTime(delta);
+        scrollBG();
 
         you.render(delta);
 
@@ -254,7 +265,7 @@ public class GameScreen implements Screen {
     public void dispose() {
 //        pauseButton.dispose();
         you.dispose();
-        BG.dispose();
+        BGtexture.dispose();
         for(Enemy e: enemies){
             e.dispose();
         }

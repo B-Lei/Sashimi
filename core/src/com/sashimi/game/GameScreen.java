@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     protected Rectangle BGposition;
     protected Texture BGtexture2;
     protected Rectangle BGposition2;
-    protected int scrollSpeed = 2; // must be a factor of screenHeight
+    protected int scrollSpeed = 4; // must be a factor of screenHeight
 
     protected Player you;
 

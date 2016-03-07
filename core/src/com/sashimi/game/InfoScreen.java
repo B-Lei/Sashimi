@@ -2,31 +2,20 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.awt.Dialog;
 
 //import javafx.stage.Stage;
 
 public class InfoScreen implements Screen {
     //Sound button;
     final Sashimi game;
-
-    private Texture waterImage;
-    public int waterWidth = 720;
-    public int waterHeight = 1400;
-    private Rectangle water;
+    private String instructions;
+    private Texture infoBG;
     public EasyButton menuButton;
     public BitmapFont infoFont;
 
@@ -40,7 +29,7 @@ public class InfoScreen implements Screen {
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
         //Set up water image as background
-        waterImage = new Texture(Gdx.files.internal("BG/seaBG.png"));
+        infoBG = new Texture(Gdx.files.internal("BG/seaBG.png"));
 
         //Set up menu button
         menuButton = new EasyButton("Main Menu.png");
@@ -50,8 +39,12 @@ public class InfoScreen implements Screen {
         //Set up font for info screen
         infoFont = new BitmapFont();
         infoFont.setColor(Color.WHITE);
-        infoFont.getData().setScale(2,2);
-
+        infoFont.getData().setScale(2, 2);
+        instructions = "MOVEMENT" +
+                "\n\nHold down finger (mobile), mouse (PC), or \npress arrow keys (PC) to move around \nthe screen." +
+                "\n\nHold SHIFT (PC only) for slower, more focused \nmovement." +
+                "\n\n\nSHOOTING MODE" +
+                "\n\nTap with a second finger while moving (mobile) \nor hold SHIFT (PC) to toggle shooting mode.";
     }
 
     public void render(float delta) {
@@ -60,21 +53,14 @@ public class InfoScreen implements Screen {
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
-        //Define instructions to be displayed
-        CharSequence instructions = "MOVEMENT" +
-                                    "\n\nHold down finger (mobile), mouse (PC), or \npress arrow keys (PC) to move around \nthe screen." +
-                                    "\n\nHold SHIFT (PC only) for slower, more focused \nmovement." +
-                                    "\n\n\nSHOOTING MODE" +
-                                    "\n\nTap with a second finger while moving (mobile) \nor hold SHIFT (PC) to toggle shooting mode.";
-
         game.batch.begin();
 
         //Add water background
-        game.batch.draw(waterImage, 0, -50, waterWidth, waterHeight);
+        game.batch.draw(infoBG, 0, 0, infoBG.getWidth(), infoBG.getHeight());
 
-        //Add text for info screen
-        infoFont.draw(game.batch, instructions, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()*2-50);
+        //Add text for info screen - gdx.graphics doesn't work for mobile
+        //infoFont.draw(game.batch, instructions, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()*2-50);
+        infoFont.draw(game.batch, instructions, 45, 1230);
 
         //Add main menu button
         game.batch.draw(menuButton.getButtonTexture(), menuButton.getX(), menuButton.getY());
@@ -92,9 +78,7 @@ public class InfoScreen implements Screen {
                 game.mainMenu();
                 //button.play();
             }
-
         }
-
     }
 
     public void show() {
@@ -118,7 +102,7 @@ public class InfoScreen implements Screen {
 
     public void dispose() {
         menuButton.dispose();
-        waterImage.dispose();
+        infoBG.dispose();
         infoFont.dispose();
         //button.dispose();
     }

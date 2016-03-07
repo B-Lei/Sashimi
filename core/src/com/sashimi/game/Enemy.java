@@ -7,12 +7,12 @@ import java.util.Random;
  * Class for Enemy Creation and AI
  */
 public class Enemy extends Entity {
-    protected int moveSpeed = 4;
+    protected int moveSpeed = 6;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,"Enemies/"+textureName);
         health = 1; // Default health
-        bulletVelocity = -7; // Default velocity
+        bulletVelocity = -8; // Default velocity
         firesBullets = true;
     }
 

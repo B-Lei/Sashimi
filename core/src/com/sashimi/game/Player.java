@@ -2,6 +2,7 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
     protected OrthographicCamera camera;
+    private Sound bubble;
 
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
     public Bullet bullet;
@@ -37,8 +39,11 @@ public class Player extends Entity {
         super(screen, x, y, "Players/"+textureName);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screen.game.screenWidth, screen.game.screenHeight);
+        bubble = Gdx.audio.newSound(Gdx.files.internal("Music/bubble.wav"));
+
         hitboxTexture = new Texture(Gdx.files.internal("Players/smallerHitbox.png"));
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
+
         velocity = new Vector2(0,0);
         health = 5;
         bulletVelocity = 20;
@@ -93,6 +98,7 @@ public class Player extends Entity {
                     Bullet tempBullet = new Bullet(screen, (int)(hitbox.x-hitbox.getWidth()/2), (int)(hitbox.y-hitbox.getHeight()+position.getHeight()/2), "bubble.png", bulletVelocity);
                     bulletManager.add(tempBullet);
                     fireDelay += 0.1;
+                    bubble.play();
                 }
             }
         }
@@ -110,6 +116,7 @@ public class Player extends Entity {
                     tempBullet = new Bullet(screen, (int) (hitbox.x - hitbox.getWidth() / 2), (int) (hitbox.y - hitbox.getHeight() + position.getHeight() / 2), "bubble.png", newVelocity);
                     bulletManager.add(tempBullet);
                     fireDelay += 0.2;
+                    bubble.play();
                 }
             }
         }

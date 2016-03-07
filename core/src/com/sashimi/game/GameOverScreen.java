@@ -2,13 +2,14 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameOverScreen implements Screen {
-
+    //Sound button;
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
@@ -21,6 +22,7 @@ public class GameOverScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
+        //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
         //Sets up a play button
         playButton = new EasyButton("Play Button.png");
@@ -57,10 +59,12 @@ public class GameOverScreen implements Screen {
             //Checks if the play button is touched
             if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
+                //button.play();
             }
             //Check if the info button is touched
             else if(mainMenu.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.mainMenu();
+                //button.play();
             }
         }
     }
@@ -90,5 +94,6 @@ public class GameOverScreen implements Screen {
         batch.dispose();
         playButton.dispose();
         mainMenu.dispose();
+        //button.dispose();
     }
 }

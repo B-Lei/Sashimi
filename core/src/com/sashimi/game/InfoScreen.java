@@ -2,6 +2,7 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,7 +20,7 @@ import java.awt.Dialog;
 //import javafx.stage.Stage;
 
 public class InfoScreen implements Screen {
-
+    //Sound button;
     final Sashimi game;
 
     private Texture waterImage;
@@ -36,6 +37,7 @@ public class InfoScreen implements Screen {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+        //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
         //Set up water image as background
         waterImage = new Texture(Gdx.files.internal("BG/seaBG.png"));
@@ -88,6 +90,7 @@ public class InfoScreen implements Screen {
             //Checks if the menu button is touched
             if(menuButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.mainMenu();
+                //button.play();
             }
 
         }
@@ -99,7 +102,6 @@ public class InfoScreen implements Screen {
     }
 
     public void hide() {
-
     }
 
     public void resume() {
@@ -118,6 +120,7 @@ public class InfoScreen implements Screen {
         menuButton.dispose();
         waterImage.dispose();
         infoFont.dispose();
+        //button.dispose();
     }
 
 }

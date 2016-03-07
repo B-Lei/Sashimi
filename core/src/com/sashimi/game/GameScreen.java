@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,6 +18,9 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 public class GameScreen implements Screen {
     final Sashimi game;
+    Music mainBGM;
+    Sound hurt;
+    Sound enemyDestroyed;
 
     protected float gameTime = 0;
     private int justOnce = 0;
@@ -46,6 +52,9 @@ public class GameScreen implements Screen {
     public GameScreen(final Sashimi game) {
         int yourWidth = 30;
         this.game = game;
+        mainBGM = Gdx.audio.newMusic(Gdx.files.internal("Music/sashimi.wav"));
+        hurt = Gdx.audio.newSound(Gdx.files.internal("Music/hurt.wav"));
+        enemyDestroyed = Gdx.audio.newSound(Gdx.files.internal("Music/enemyDestroyed.wav"));
 
         BGtexture = new Texture(Gdx.files.internal("BG/BG1scrollable.png"));
         BGposition = new Rectangle(0,0,BGtexture.getWidth(),BGtexture.getHeight());
@@ -127,6 +136,7 @@ public class GameScreen implements Screen {
                 if (e.isHit(you.getHitbox())) {
                     rumbling = true;
                     if (!you.invincible) you.health--; // COMMENT OUT FOR INVINCIBILITY
+                    hurt.play();
                     you.invincible = true;
                     if (!e.invincible) e.health--;
                     System.out.println("Collided with Enemy. Your HP: " + you.health);
@@ -136,6 +146,7 @@ public class GameScreen implements Screen {
                         enemies.remove(e);
                         you.setScore(System.currentTimeMillis());
                         numEnemies--;
+                        enemyDestroyed.play();
                     }
                 }
             }
@@ -154,6 +165,7 @@ public class GameScreen implements Screen {
                         enemies.remove(e);
                         you.setScore(System.currentTimeMillis());
                         numEnemies--;
+                        enemyDestroyed.play();
                     }
                 }
             }
@@ -163,6 +175,7 @@ public class GameScreen implements Screen {
                     if (you.isHit(enemyBulletManager.get(j).getPosition())) {
                         rumbling = true;
                         you.health--; // COMMENT OUT FOR INVINCIBILITY
+                        hurt.play();
                         you.invincible = true;
                         System.out.println("Hit by Bullet. Your HP: " + you.health);
                         enemyBulletManager.get(j).dispose();
@@ -177,7 +190,7 @@ public class GameScreen implements Screen {
     public void checkPlayerHealth () {
         // If your health is 0, go back to title screen
         if (you.health <= 0){
-            System.out.println("Score: "+you.getScore());
+            System.out.println("Score: " + you.getScore());
             game.gameOver();
         }
     }
@@ -245,12 +258,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // start the playback of the background music
-        // when the screen is shown
+        // start the playback of the background music when the screen is shown
+        mainBGM.setLooping(true);
+        mainBGM.play();
     }
 
     @Override
     public void hide() {
+        mainBGM.stop();
     }
 
     @Override
@@ -269,5 +284,8 @@ public class GameScreen implements Screen {
         for(Enemy e: enemies){
             e.dispose();
         }
+        mainBGM.dispose();
+        hurt.dispose();
+        enemyDestroyed.dispose();
     }
 }

@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     protected Rectangle BGposition;
     protected Texture BGtexture2;
     protected Rectangle BGposition2;
-    protected int scrollSpeed = 4; // must be a factor of screenHeight
+    protected int scrollSpeed = 4; // must be a factor of screenHeight (1280)
 
     protected Player you;
 
@@ -62,7 +62,6 @@ public class GameScreen implements Screen {
         BGposition2 = new Rectangle(0,game.screenHeight,BGtexture2.getWidth(),BGtexture2.getHeight());
 
         you = new Player(this,game.screenWidth/2-yourWidth/2,100,"mrfish1.5x.png");
-        Vector2 spriteDimensions = new Vector2(0,0);
         //Set up menu button
         /*pauseButton = new EasyButton("Pause.png");
         pauseButton.setX((game.screenWidth / 2) - (pauseButton.getWidth() / 2));
@@ -88,7 +87,6 @@ public class GameScreen implements Screen {
 //            numEnemies++;
 //            justOnce++;
 //        }
-
         // Spawn random enemies up until 20
         if (numEnemies < 20) {
             if (you.health > 0) {
@@ -141,7 +139,6 @@ public class GameScreen implements Screen {
                     if (!e.invincible) e.health--;
                     System.out.println("Collided with Enemy. Your HP: " + you.health);
                     if (e.health <= 0) {
-                        //System.out.println("Enemy is destroyed");
                         e.dispose();
                         enemies.remove(e);
                         you.setScore(System.currentTimeMillis());
@@ -160,7 +157,6 @@ public class GameScreen implements Screen {
                     you.bulletManager.remove(j);
                     j--;
                     if (e.health <= 0) {
-                        //System.out.println("Enemy is destroyed");
                         e.dispose();
                         enemies.remove(e);
                         you.setScore(System.currentTimeMillis());
@@ -260,7 +256,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // start the playback of the background music when the screen is shown
         mainBGM.setLooping(true);
         mainBGM.play();
     }

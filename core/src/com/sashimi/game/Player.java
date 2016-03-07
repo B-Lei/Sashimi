@@ -31,7 +31,7 @@ public class Player extends Entity {
     protected float invincibleTimeTotal = 0;
     protected boolean visibleToggle = true;
 
-    public double prevHitTime = 0;
+    private double prevHitTime = 0;
     private int score;
     public int enemiesHit;
 
@@ -57,10 +57,15 @@ public class Player extends Entity {
         return hitbox.overlaps(other);
     }
 
+    // Currently has a bug that causes score to be negative lower bound of integer
+    // FOUND: this occurs when you hit two enemies at the same time, so deltaTime is 0 - and when
+    // you divide by 0, you overflow the score. To solve this, you can just add a value to it as a baseline.
     public void setScore(double currentTime){
         double deltaTime = currentTime - prevHitTime;
-        score = score + (int)(1000.0/(deltaTime));
+        score = score + (int)(1000.0/(1 + deltaTime));
         prevHitTime = currentTime;
+        System.out.println("Time difference: " + deltaTime);
+        System.out.println("Score: " + score);
     }
 
     public int getScore(){

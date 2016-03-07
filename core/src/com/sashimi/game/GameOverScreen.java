@@ -18,7 +18,7 @@ public class GameOverScreen implements Screen {
     OrthographicCamera camera;
     SpriteBatch batch;
     public BitmapFont infoFont;
-    private String text;
+    protected String text;
 
     public GameOverScreen(final Sashimi game, int score, int secondsElapsed) {
         this.game = game;

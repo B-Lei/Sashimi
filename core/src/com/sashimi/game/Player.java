@@ -45,8 +45,8 @@ public class Player extends Entity {
         hitbox = new Rectangle(x+position.getWidth()/2,y+position.getHeight()/2,hitboxTexture.getWidth(),hitboxTexture.getHeight());
 
         velocity = new Vector2(0,0);
-        health = 3;
-        bulletVelocity = 20;
+        health = 10;
+        bulletVelocity = new Vector2(0,20);
         firesBullets = true;
     }
 

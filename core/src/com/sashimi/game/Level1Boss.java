@@ -10,13 +10,13 @@ public class Level1Boss extends RandomEnemy{
     private int stage = 0;
     private int stageDuration = 0;
     private int direction = 1;
-    private Entity beam = new Entity(screen,(int)this.getPosition().x,(int)this.getPosition().y,"Bullets/beam2.png" );
+    //private Entity beam = new Entity(screen,(int)this.getPosition().x,(int)this.getPosition().y,"Bullets/beam2.png" );
 
     private Texture stages[] = new Texture[7];
 
     Level1Boss(GameScreen screen, int x, int y){
         super(screen, x, y, "Stage1.png");
-        invincible = true;
+        health = 50;
         stages[0] = new Texture(Gdx.files.internal("Enemies/Stage1.png"));
         stages[1] = new Texture(Gdx.files.internal("Enemies/Stage2.png"));
         stages[2] = new Texture(Gdx.files.internal("Enemies/Stage3.png"));
@@ -34,7 +34,7 @@ public class Level1Boss extends RandomEnemy{
         if (health > 0 && firesBullets) {
             fireDelay -= deltaTime;
             if(fireDelay <= 0) {
-                Bullet tempBullet = new Bullet(screen, (int)(position.x+position.getHeight()/4), (int)(position.y-position.getHeight()/4), "beam2.png", bulletVelocity);
+                Bullet tempBullet = new Bullet(screen, (int)(position.x+position.getHeight()/4), (int)(position.y-position.getHeight()), "beam2.png", bulletVelocity);
                 bulletManager.add(tempBullet);
                 fireDelay += 0.7;
             }

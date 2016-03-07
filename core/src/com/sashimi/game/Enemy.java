@@ -1,5 +1,7 @@
 package com.sashimi.game;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,12 +10,14 @@ import java.util.Random;
  */
 public class Enemy extends Entity {
     protected int moveSpeed = 6;
+    protected int moveType;
 
     Enemy(GameScreen screen, int x, int y, String textureName){
         super(screen,x,y,"Enemies/"+textureName);
         health = 1; // Default health
-        bulletVelocity = -8; // Default velocity
+        bulletVelocity = new Vector2(0,-8); // Default velocity
         firesBullets = true;
+        moveType = 0;
     }
 
     // The below actually just adds bullets to an external bulletManager (from the game screen)
@@ -29,17 +33,15 @@ public class Enemy extends Entity {
         }
     }
 
-    public void move (float deltaTime, int code) {
-        switch (code) {
-            // Horizontal movement
-            case 1: {
-                position.x += moveSpeed;
-            }
-        }
-    }
-
     void render(float delta){
         super.render();
-        move(delta, 1);
+        // Default: still
+        if (moveType == 0) return;
+        // Horizontal movement (right)
+        else if (moveType == 1) {position.x += moveSpeed;}
+        // Horizontal movement (left)
+        else if (moveType == 2) {position.x -= moveSpeed;}
+        // Vertical movement (down)
+        else if (moveType == 3) {position.y -= moveSpeed;}
     }
 }

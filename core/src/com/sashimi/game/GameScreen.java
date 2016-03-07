@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -34,6 +35,7 @@ public class GameScreen implements Screen {
     protected Vector<Enemy> enemies = new Vector<Enemy>();
     ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
     protected float enemySpawnDelay;
+    protected float enemySpawnDelay2;
     protected int numEnemies;
 
     protected boolean rumbling = false;
@@ -76,7 +78,7 @@ public class GameScreen implements Screen {
     public void spawnEnemies (float deltaTime) {
         // Example of a time-spawned enemy - testing purposes
         if (secondsElapsed > 2 && justOnce == 0) {
-            Enemy tempEnemy = new Jellyfish(this, 500, 800);
+            Enemy tempEnemy = new Jellyfish(this, 500, 800, 1);
             enemies.add(tempEnemy);
             numEnemies++;
             justOnce++;
@@ -89,6 +91,35 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void spawnJellyRow(float deltaTime, int height, int direction) {
+        // Spawns two enemies at a time, multiple times, to form a row
+        enemySpawnDelay -= deltaTime;
+        if (enemySpawnDelay <= 0) {
+            int spawnPoint = (direction == 1) ? -50 : game.screenWidth+50;
+            Enemy tempEnemy = new Jellyfish(this, spawnPoint, height, direction);
+            enemies.add(tempEnemy);
+            tempEnemy = new Jellyfish(this, spawnPoint, height-100, direction);
+            enemies.add(tempEnemy);
+            numEnemies += 2;
+            enemySpawnDelay += 0.3;
+        }
+    }
+
+    public void spawnJellySideColumns(float deltaTime, int spaceFromSides) {
+        // Spawns two enemies at a time on surrounding sides
+        enemySpawnDelay -= deltaTime;
+        if (enemySpawnDelay <= 0) {
+            Enemy tempEnemy = new Jellyfish(this, spaceFromSides, game.screenHeight+50, 3);
+            tempEnemy.bulletVelocity = new Vector2(3,-6);
+            enemies.add(tempEnemy);
+            tempEnemy = new Jellyfish(this, game.screenWidth-spaceFromSides, game.screenHeight+25, 3);
+            tempEnemy.bulletVelocity = new Vector2(-3,-6);
+            enemies.add(tempEnemy);
+            numEnemies += 2;
+            enemySpawnDelay += 0.4;
+        }
+    }
+
     public void spawnRandomEnemies (float deltaTime) {
         // Spawn random enemies up until 20
         if (numEnemies < 20) {
@@ -96,9 +127,9 @@ public class GameScreen implements Screen {
                 enemySpawnDelay -= deltaTime;
                 if (enemySpawnDelay <= 0) {
                     int randomDeterminant = random(1);
-                    Enemy randomEnemy = (1 == randomDeterminant) ? new Jellyfish(this, random(720), game.screenHeight) : new Starfish(this, random(720), game.screenHeight);
+                    Enemy randomEnemy = /*(1 == randomDeterminant) ? new Jellyfish(this, random(720), game.screenHeight, 0) :*/ new Starfish(this, random(720), game.screenHeight);
                     enemies.add(randomEnemy);
-                    enemySpawnDelay += 0.3;
+                    enemySpawnDelay += 0.2;
                     numEnemies++;
                 }
             }
@@ -118,7 +149,7 @@ public class GameScreen implements Screen {
             Bullet savedBullet = enemyBulletManager.get(i);
             savedBullet.update();
             // Saves memory by deleting bullets out of bounds
-            if(savedBullet.bulletLocation.x > -30 && savedBullet.bulletLocation.x < game.screenWidth && savedBullet.bulletLocation.y > 0 && savedBullet.bulletLocation.y < game.screenHeight)
+            if(savedBullet.bulletLocation.x > -30 && savedBullet.bulletLocation.x < game.screenWidth && savedBullet.bulletLocation.y > -500 && savedBullet.bulletLocation.y < game.screenHeight)
                 game.batch.draw(savedBullet.texture, savedBullet.bulletLocation.x, savedBullet.bulletLocation.y);
             else {
                 enemyBulletManager.remove(i);
@@ -240,7 +271,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(BGtexture, BGposition.x, BGposition.y, BGposition.getWidth(), BGposition.getHeight());
         game.batch.draw(BGtexture2, BGposition2.x, BGposition2.y, BGposition2.getWidth(), BGposition2.getHeight());
-        updateGameTime((int)(System.nanoTime()/1e9));
+        updateGameTime((int) (System.nanoTime() / 1e9));
         scrollBG();
 
         you.render(delta);

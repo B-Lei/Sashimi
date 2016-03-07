@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class Entity {
     //Removed final because some characters have multiple stages
     Texture texture;
     public int health;
-    protected int bulletVelocity;
+    protected Vector2 bulletVelocity;
     protected float fireDelay;
     protected boolean firesBullets;
     protected boolean visibleTexture = true;

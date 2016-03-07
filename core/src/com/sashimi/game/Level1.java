@@ -1,10 +1,11 @@
 package com.sashimi.game;
 
+import com.badlogic.gdx.math.Vector2;
+
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class Level1 extends GameScreen {
-    private int wave1enemyCount = 0;
-    private int wave2enemyCount = 0;
+    int spawnedBoss = 0;
 
     public Level1 (final Sashimi game) {
         super(game);
@@ -12,30 +13,29 @@ public class Level1 extends GameScreen {
 
     @Override
     public void spawnEnemies(float deltaTime) {
-        // First line of enemies
-        if (secondsElapsed > 2 && wave1enemyCount < 10) {
-            // Spawns two enemies at a time, multiple times, to form a row
-            enemySpawnDelay -= deltaTime;
-            if (enemySpawnDelay <= 0) {
-
-                Enemy tempEnemy = new Jellyfish(this, -50, 1200);
-                enemies.add(tempEnemy);
-                wave1enemyCount++;
-
-                tempEnemy = new Jellyfish(this, -50, 1100);
-                enemies.add(tempEnemy);
-                wave1enemyCount++;
-
-                numEnemies += 2;
-                enemySpawnDelay += 0.3;
-            }
+        if (secondsElapsed > 2 && secondsElapsed < 6) {spawnJellyRow(deltaTime, 1200, 1);}
+        if (secondsElapsed > 3 && secondsElapsed < 7) {spawnJellyRow(deltaTime, 1100, 2);}
+        if (secondsElapsed > 6 && secondsElapsed < 10) {spawnJellySideColumns(deltaTime, 100);}
+        if (secondsElapsed > 10 && secondsElapsed < 20) {spawnRandomEnemies(deltaTime);}
+        if (secondsElapsed > 17 && secondsElapsed < 22) {spawnJellySideColumns(deltaTime, 100);}
+        if (secondsElapsed > 22 && secondsElapsed < 24) {spawnJellySideColumns(deltaTime, 200);}
+        if (secondsElapsed > 24 && secondsElapsed < 27) {spawnJellyRow(deltaTime, 900, 1);}
+        if (secondsElapsed > 28 && secondsElapsed < 31) {spawnJellyRow(deltaTime, 800, 1);}
+        if (secondsElapsed > 31 && justOnce == 0) {
+            enemies.add(new Level1Boss(this, game.screenWidth/2, 1100));
+            numEnemies++;
+            justOnce++;
+            spawnedBoss = 1;
+        }
+        if (spawnedBoss == 1 && enemies.size() == 0) {
+            game.victory(you.getScore(), secondsElapsed);
         }
     }
 
     @Override
     public void render(float delta) {
         //TODO remove
-        game.level1Boss();
+        //game.level1Boss();
         super.render(delta);
     }
 }

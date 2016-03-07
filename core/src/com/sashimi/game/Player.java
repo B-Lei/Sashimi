@@ -58,11 +58,12 @@ public class Player extends Entity {
     }
 
     public void setScore(double currentTime){
-        double deltaTime = currentTime - prevHitTime;
-        score = score + (int)(1000.0/(1 + deltaTime)); // 1 is in case deltaTime is 0
+        double deltaTime = (int)(currentTime - prevHitTime);
+        if (deltaTime == 0) deltaTime = 1; // Takes care of zeros
+        score = score + (int)(1000.0/deltaTime);
         prevHitTime = currentTime;
-        System.out.println("Time difference: " + deltaTime);
-        System.out.println("Score: " + score);
+        // System.out.println("Time difference: " + deltaTime);
+        // System.out.println("Score: " + score);
     }
 
     public int getScore(){

@@ -1,10 +1,8 @@
 package com.sashimi.game;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Vector;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -12,17 +10,17 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class GameScreen implements Screen {
     final Sashimi game;
-    Music mainBGM;
+    Music BGM;
     Sound hurt;
     Sound enemyDestroyed;
 
-    protected float gameTime = 0;
+    protected int startingTime = (int)(System.nanoTime()/1e9);
+    protected int secondsElapsed = 0;
     private int justOnce = 0;
 
     protected Texture BGtexture;
@@ -52,7 +50,8 @@ public class GameScreen implements Screen {
     public GameScreen(final Sashimi game) {
         int yourWidth = 30;
         this.game = game;
-        mainBGM = Gdx.audio.newMusic(Gdx.files.internal("Music/sashimi.wav"));
+
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/sashimi.wav"));
         hurt = Gdx.audio.newSound(Gdx.files.internal("Music/hurt.wav"));
         enemyDestroyed = Gdx.audio.newSound(Gdx.files.internal("Music/enemyDestroyed.wav"));
 
@@ -69,19 +68,20 @@ public class GameScreen implements Screen {
         */
     }
 
-    public void updateGameTime (float deltaTime) {
-        gameTime += deltaTime;
+    public void updateGameTime (int currentTime) {
+        secondsElapsed = currentTime - startingTime;
+        //System.out.println("Seconds elapsed: " + secondsElapsed);
     }
 
     public void spawnEnemies (float deltaTime) {
         // Example of a time-spawned enemy - testing purposes
-//        if (gameTime > 2 && justOnce == 0) {
+//        if (secondsElapsed > 2 && justOnce == 0) {
 //            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
 //            enemies.add(tempEnemy);
 //            numEnemies++;
 //            justOnce++;
 //        }
-//        if (gameTime > 3 && justOnce == 1) {
+//        if (secondsElapsed > 3 && justOnce == 1) {
 //            Enemy tempEnemy = new Enemy(this, 200, 1000, "starfish1.5x.png");
 //            enemies.add(tempEnemy);
 //            numEnemies++;
@@ -187,7 +187,7 @@ public class GameScreen implements Screen {
         // If your health is 0, go back to title screen
         if (you.health <= 0){
             System.out.println("Score: " + you.getScore());
-            game.gameOver();
+            game.gameOver(you.getScore(), secondsElapsed);
         }
     }
 
@@ -231,7 +231,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(BGtexture, BGposition.x, BGposition.y, BGposition.getWidth(), BGposition.getHeight());
         game.batch.draw(BGtexture2, BGposition2.x, BGposition2.y, BGposition2.getWidth(), BGposition2.getHeight());
-        updateGameTime(delta);
+        updateGameTime((int)(System.nanoTime()/1e9));
         scrollBG();
 
         you.render(delta);
@@ -256,13 +256,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        mainBGM.setLooping(true);
-        mainBGM.play();
+        BGM.setLooping(true);
+        BGM.setVolume((float)0.6);
+        BGM.play();
     }
 
     @Override
     public void hide() {
-        mainBGM.stop();
+        BGM.stop();
     }
 
     @Override
@@ -281,7 +282,7 @@ public class GameScreen implements Screen {
         for(Enemy e: enemies){
             e.dispose();
         }
-        mainBGM.dispose();
+        BGM.dispose();
         hurt.dispose();
         enemyDestroyed.dispose();
     }

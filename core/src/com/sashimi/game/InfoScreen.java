@@ -2,6 +2,7 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,11 +15,11 @@ import com.badlogic.gdx.math.Vector3;
 public class InfoScreen implements Screen {
     //Sound button;
     final Sashimi game;
-    private String instructions;
     private Texture infoBG;
     public EasyButton menuButton;
     public BitmapFont infoFont;
-
+    private String text;
+    Music BGM;
 
     OrthographicCamera camera;
 
@@ -27,6 +28,8 @@ public class InfoScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
+
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/InfoScreen.wav"));
 
         //Set up water image as background
         infoBG = new Texture(Gdx.files.internal("BG/seaBG.png"));
@@ -40,7 +43,7 @@ public class InfoScreen implements Screen {
         infoFont = new BitmapFont();
         infoFont.setColor(Color.WHITE);
         infoFont.getData().setScale(2, 2);
-        instructions = "MOVEMENT" +
+        text = "MOVEMENT" +
                 "\n\nHold down finger (mobile), mouse (PC), or \npress arrow keys (PC) to move around \nthe screen." +
                 "\n\nHold SHIFT (PC only) for slower, more focused \nmovement." +
                 "\n\n\nSHOOTING MODE" +
@@ -58,9 +61,7 @@ public class InfoScreen implements Screen {
         //Add water background
         game.batch.draw(infoBG, 0, 0, infoBG.getWidth(), infoBG.getHeight());
 
-        //Add text for info screen - gdx.graphics doesn't work for mobile
-        //infoFont.draw(game.batch, instructions, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()*2-50);
-        infoFont.draw(game.batch, instructions, 45, 1230);
+        infoFont.draw(game.batch, text, 45, 1230);
 
         //Add main menu button
         game.batch.draw(menuButton.getButtonTexture(), menuButton.getX(), menuButton.getY());
@@ -76,13 +77,16 @@ public class InfoScreen implements Screen {
             //Checks if the menu button is touched
             if(menuButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.mainMenu();
+                BGM.stop();
                 //button.play();
             }
         }
     }
 
     public void show() {
-
+        BGM.setLooping(true);
+        BGM.setVolume((float)0.6);
+        BGM.play();
     }
 
     public void hide() {
@@ -104,6 +108,7 @@ public class InfoScreen implements Screen {
         menuButton.dispose();
         infoBG.dispose();
         infoFont.dispose();
+        BGM.dispose();
         //button.dispose();
     }
 

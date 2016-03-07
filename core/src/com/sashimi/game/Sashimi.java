@@ -80,10 +80,10 @@ public class Sashimi extends Game {
         setScreen(new MainMenuScreen(this));
     }
 
-    public void gameOver(){
+    public void gameOver(int score, int secondsElapsed){
         System.out.println("Disposing of game screen");
         screen.dispose();
-        setScreen(new GameOverScreen(this));
+        setScreen(new GameOverScreen(this, score, secondsElapsed));
     }
 
     public void pauseScreen(){

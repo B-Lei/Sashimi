@@ -2,38 +2,38 @@ package com.sashimi.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 public class GameOverScreen implements Screen {
     //Sound button;
+    Music BGM;
     final Sashimi game;
     OrthographicCamera camera;
     SpriteBatch batch;
-    //Texture buttonTex;
-    EasyButton playButton;
-    EasyButton mainMenu;
+    public BitmapFont infoFont;
+    private String text;
 
-    public GameOverScreen(final Sashimi game) {
+    public GameOverScreen(final Sashimi game, int score, int secondsElapsed) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/GameOver.wav"));
 
-        //Sets up a play button
-        playButton = new EasyButton("Play Button.png");
-        playButton.setX((game.screenWidth/2)-(playButton.getWidth()/2));
-        playButton.setY((game.screenHeight/2));
-
-        //Sets up info screen button
-        mainMenu = new EasyButton("Main Menu.png");
-        mainMenu.setX((game.screenWidth / 2) - (mainMenu.getWidth() / 2));
-        mainMenu.setY((game.screenHeight / 2) - (mainMenu.getHeight() * 3 / 2));
-
+        infoFont = new BitmapFont();
+        infoFont.setColor(Color.WHITE);
+        infoFont.getData().setScale(2, 2);
+        text = "          GAME OVER!\n\n" +
+                "Score:               " + score + "\n" +
+                "You survived:    " + secondsElapsed + " seconds";
     }
 
     @Override
@@ -44,28 +44,14 @@ public class GameOverScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        //Render Play Button
         game.batch.begin();
-        game.batch.draw(playButton.getButtonTexture(), playButton.getX(), playButton.getY());
-        game.batch.draw(mainMenu.getButtonTexture(), mainMenu.getX(), mainMenu.getY());
+        infoFont.draw(game.batch, text, game.screenWidth/4, game.screenHeight/2 + 3*infoFont.getLineHeight());
         game.batch.end();
 
         //In the event that screen is touched
         if(Gdx.input.justTouched()){
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-
-            //Checks if the play button is touched
-            if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
-                game.level1();
-                //button.play();
-            }
-            //Check if the info button is touched
-            else if(mainMenu.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
-                game.mainMenu();
-                //button.play();
-            }
+            game.mainMenu();
+            BGM.stop();
         }
     }
 
@@ -75,10 +61,14 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void show() {
+        BGM.setLooping(true);
+        BGM.setVolume((float)0.5);
+        BGM.play();
     }
 
     @Override
     public void hide() {
+        BGM.stop();
     }
 
     @Override
@@ -92,8 +82,8 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose(){
         batch.dispose();
-        playButton.dispose();
-        mainMenu.dispose();
+        infoFont.dispose();
         //button.dispose();
+        BGM.dispose();
     }
 }

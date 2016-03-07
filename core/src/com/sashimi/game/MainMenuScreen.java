@@ -3,17 +3,14 @@ package com.sashimi.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 
 public class MainMenuScreen implements Screen {
-    Music menuBGM;
+    Music BGM;
     //Sound button;
     final Sashimi game;
     OrthographicCamera camera;
@@ -27,7 +24,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
-        menuBGM = Gdx.audio.newMusic(Gdx.files.internal("Music/sashimiMenu.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenu.wav"));
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
         //Sets up a play button
@@ -71,7 +68,7 @@ public class MainMenuScreen implements Screen {
             if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
                 //button.play();
-                menuBGM.stop();
+                BGM.stop();
             }
             //Check if the info button is touched
             else if(infoButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
@@ -87,13 +84,14 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        menuBGM.setLooping(true);
-        menuBGM.play();
+        BGM.setLooping(true);
+        BGM.setVolume((float)0.6);
+        BGM.play();
     }
 
     @Override
     public void hide() {
-        menuBGM.stop();
+        BGM.stop();
     }
 
     @Override
@@ -109,7 +107,7 @@ public class MainMenuScreen implements Screen {
         batch.dispose();
         playButton.dispose();
         infoButton.dispose();
-        menuBGM.dispose();
+        BGM.dispose();
         //button.dispose();
     }
 }

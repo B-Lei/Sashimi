@@ -43,7 +43,7 @@ public class InfoScreen implements Screen {
         //Set up menu button
         menuButton = new EasyButton("Main Menu.png");
         menuButton.setX((game.screenWidth / 2) - (menuButton.getWidth() / 2));
-        menuButton.setY((game.screenHeight / 2) -  30);
+        menuButton.setY((game.screenHeight / 2) - 150);
 
         //Set up font for info screen
         infoFont = new BitmapFont();
@@ -60,9 +60,11 @@ public class InfoScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         //Define instructions to be displayed
-        CharSequence instructions = "Goal: Swim to the top of the ocean while\navoiding the enemies." +
-                                    "\n\nHold down finger to move from side to side,\nand tap to shoot bubbles." +
-                                    "\n\nAdd better instructions here...";
+        CharSequence instructions = "MOVEMENT" +
+                                    "\n\nHold down finger (mobile), mouse (PC), or \npress arrow keys (PC) to move around \nthe screen." +
+                                    "\n\nHold SHIFT (PC only) for slower, more focused \nmovement." +
+                                    "\n\n\nSHOOTING MODE" +
+                                    "\n\nTap with a second finger while moving (mobile) \nor hold SHIFT (PC) to toggle shooting mode.";
 
         game.batch.begin();
 

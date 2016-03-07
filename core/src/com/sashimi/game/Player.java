@@ -27,7 +27,7 @@ public class Player extends Entity {
 
     protected float invincibleDelay = 0;
     protected float invincibleTimeTotal = 0;
-    protected boolean invincibleToggle = true;
+    protected boolean visibleToggle = true;
 
     public double prevHitTime = 0;
     private int score;
@@ -65,10 +65,10 @@ public class Player extends Entity {
     public void checkInvincibility(float deltaTime) {
         invincibleTimeTotal += deltaTime;
         invincibleDelay -= deltaTime;
-        if (invincibleTimeTotal < 4) {
+        if (invincibleTimeTotal < 3) {
             if (invincibleDelay <= 0) {
-                invincibleToggle = !invincibleToggle;
-                visibleTexture = (invincibleToggle);
+                visibleToggle = !visibleToggle;
+                visibleTexture = (visibleToggle);
                 invincibleDelay += 0.07;
             }
         }

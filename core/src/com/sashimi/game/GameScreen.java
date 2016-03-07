@@ -1,14 +1,13 @@
 package com.sashimi.game;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
@@ -29,6 +28,15 @@ public class GameScreen implements Screen {
     ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
     private float enemySpawnDelay;
     private int numEnemies;
+
+    private boolean rumbling = false;
+    float rumbleTime = 0.2f;
+    float cameraX, cameraY;
+    float current_time = 0;
+    float power = 10;
+    float current_power = 0;
+    boolean coordToggle = true;
+    private float rumbleDelay = 0;
 
     public EasyButton pauseButton;
 
@@ -108,20 +116,24 @@ public class GameScreen implements Screen {
     }
 
     public void checkForCollisions (float deltaTime) {
-        // Handles enemy collisions
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
-            if(e.isHit(you.getHitbox())){
-                if (!you.invincible) you.health--; // COMMENT OUT FOR INVINCIBILITY
-                you.invincible = true;
-                if (!e.invincible) e.health--;
-                System.out.println("Collided with Enemy. Your HP: "+ you.health);
-                if (e.health <= 0) {
-                    //System.out.println("Enemy is destroyed");
-                    e.dispose();
-                    enemies.remove(e);
-                    you.setScore(System.currentTimeMillis());
-                    numEnemies--;
+
+            // Handles enemy collisions
+            if (!you.invincible) {
+                if (e.isHit(you.getHitbox())) {
+                    rumbling = true;
+                    if (!you.invincible) you.health--; // COMMENT OUT FOR INVINCIBILITY
+                    you.invincible = true;
+                    if (!e.invincible) e.health--;
+                    System.out.println("Collided with Enemy. Your HP: " + you.health);
+                    if (e.health <= 0) {
+                        //System.out.println("Enemy is destroyed");
+                        e.dispose();
+                        enemies.remove(e);
+                        you.setScore(System.currentTimeMillis());
+                        numEnemies--;
+                    }
                 }
             }
 
@@ -146,6 +158,7 @@ public class GameScreen implements Screen {
             for(int j=0; j<enemyBulletManager.size(); j++) {
                 if (!you.invincible) {
                     if (you.isHit(enemyBulletManager.get(j).getPosition())) {
+                        rumbling = true;
                         you.health--; // COMMENT OUT FOR INVINCIBILITY
                         you.invincible = true;
                         System.out.println("Hit by Bullet. Your HP: " + you.health);
@@ -163,6 +176,29 @@ public class GameScreen implements Screen {
         if (you.health <= 0){
             System.out.println("Score: "+you.getScore());
             game.gameOver();
+        }
+    }
+
+    public void performRumble(float deltaTime) {
+        rumbleDelay -= deltaTime;
+        if(current_time <= rumbleTime) {
+            if (rumbleDelay <= 0) {
+                current_power = power * ((rumbleTime - current_time) / rumbleTime);
+                cameraX = ((coordToggle) ? 0.8f : -0.8f) * 2 * current_power;
+                cameraY = ((coordToggle) ? -0.12f : 0.12f) * 2 * current_power;
+
+                // Set the camera to new x/y position
+                you.camera.translate(-cameraX, -cameraY);
+                current_time += deltaTime;
+                coordToggle = !coordToggle;
+                rumbleDelay += 0.07;
+            }
+        } else {
+            // Reset camera position and values
+            you.camera.setToOrtho(false, game.screenWidth, game.screenHeight);
+            current_time = 0;
+            current_power = 0;
+            rumbling = false;
         }
     }
 
@@ -184,6 +220,8 @@ public class GameScreen implements Screen {
         checkForCollisions(delta);
 
         checkPlayerHealth();
+
+        if (rumbling) performRumble(delta);
 
         //Add pause button (temporary, will be improved later)
         //game.batch.draw(pauseButton.getButtonTexture(), pauseButton.getX(), pauseButton.getY());

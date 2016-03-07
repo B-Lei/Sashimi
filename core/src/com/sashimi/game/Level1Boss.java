@@ -28,7 +28,6 @@ public class Level1Boss extends RandomEnemy{
 
     @Override
     void render(){
-        super.render();
         moveLeftAndRight();
         screen.game.batch.draw(stages[stage],this.getPosition().x,this.getPosition().y);
         if(stageDuration == 0){

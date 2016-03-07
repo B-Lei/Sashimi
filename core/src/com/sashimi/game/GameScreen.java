@@ -21,7 +21,7 @@ public class GameScreen implements Screen {
 
     protected int startingTime = (int)(System.nanoTime()/1e9);
     protected int secondsElapsed = 0;
-    private int justOnce = 0;
+    protected int justOnce = 0;
 
     protected Texture BGtexture;
     protected Rectangle BGposition;
@@ -33,17 +33,17 @@ public class GameScreen implements Screen {
 
     protected Vector<Enemy> enemies = new Vector<Enemy>();
     ArrayList<Bullet> enemyBulletManager = new ArrayList<Bullet>();
-    private float enemySpawnDelay;
-    private int numEnemies;
+    protected float enemySpawnDelay;
+    protected int numEnemies;
 
-    private boolean rumbling = false;
+    protected boolean rumbling = false;
     float rumbleTime = 0.2f;
     float cameraX, cameraY;
     float current_time = 0;
     float power = 7;
     float current_power = 0;
     boolean coordToggle = true;
-    private float rumbleDelay = 0;
+    protected float rumbleDelay = 0;
 
     public EasyButton pauseButton;
 
@@ -75,31 +75,17 @@ public class GameScreen implements Screen {
 
     public void spawnEnemies (float deltaTime) {
         // Example of a time-spawned enemy - testing purposes
-//        if (secondsElapsed > 2 && justOnce == 0) {
-//            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
-//            enemies.add(tempEnemy);
-//            numEnemies++;
-//            justOnce++;
-//        }
-//        if (secondsElapsed > 3 && justOnce == 1) {
-//            Enemy tempEnemy = new Enemy(this, 200, 1000, "starfish1.5x.png");
-//            enemies.add(tempEnemy);
-//            numEnemies++;
-//            justOnce++;
-//        }
-        // Spawn random enemies up until 20
-        if (numEnemies < 20) {
-            if (you.health > 0) {
-                enemySpawnDelay -= deltaTime;
-                if (enemySpawnDelay <= 0) {
-                    int randomDeterminant = random(1);
-                    String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
-                    RandomEnemy tempEnemy = new RandomEnemy(this, random(720), game.screenHeight, randomEnemy);
-                    enemies.add(tempEnemy);
-                    enemySpawnDelay += 0.3;
-                    numEnemies++;
-                }
-            }
+        if (secondsElapsed > 2 && justOnce == 0) {
+            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
+            enemies.add(tempEnemy);
+            numEnemies++;
+            justOnce++;
+        }
+        if (secondsElapsed > 3 && justOnce == 1) {
+            Enemy tempEnemy = new Enemy(this, 200, 1000, "starfish1.5x.png");
+            enemies.add(tempEnemy);
+            numEnemies++;
+            justOnce++;
         }
     }
 
@@ -223,8 +209,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render (float delta) {
-        //TODO remove
-        //game.level1Boss();
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

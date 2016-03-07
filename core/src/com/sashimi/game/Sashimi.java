@@ -65,7 +65,7 @@ public class Sashimi extends Game {
     public void level1(){
         System.out.println("Disposing of main menu screen");
         screen.dispose();
-        setScreen(new GameScreen(this));
+        setScreen(new Level1(this));
     }
 
     public void infoScreen(){

@@ -76,13 +76,13 @@ public class GameScreen implements Screen {
     public void spawnEnemies (float deltaTime) {
         // Example of a time-spawned enemy - testing purposes
         if (secondsElapsed > 2 && justOnce == 0) {
-            Enemy tempEnemy = new Enemy(this, 500, 800, "jelly1.5x.png");
+            Enemy tempEnemy = new Jellyfish(this, 500, 800);
             enemies.add(tempEnemy);
             numEnemies++;
             justOnce++;
         }
         if (secondsElapsed > 3 && justOnce == 1) {
-            Enemy tempEnemy = new Enemy(this, 200, 1000, "starfish1.5x.png");
+            Enemy tempEnemy = new Starfish(this, 200, 1000);
             enemies.add(tempEnemy);
             numEnemies++;
             justOnce++;
@@ -241,7 +241,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         BGM.setLooping(true);
-        BGM.setVolume((float)0.6);
+        BGM.setVolume((float) 0.6);
         BGM.play();
     }
 

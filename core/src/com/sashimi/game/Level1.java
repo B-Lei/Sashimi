@@ -15,9 +15,8 @@ public class Level1 extends GameScreen {
                 enemySpawnDelay -= deltaTime;
                 if (enemySpawnDelay <= 0) {
                     int randomDeterminant = random(1);
-                    String randomEnemy = (1 == randomDeterminant) ? "starfish1.5x.png" : "jelly1.5x.png";
-                    RandomEnemy tempEnemy = new RandomEnemy(this, random(720), game.screenHeight, randomEnemy);
-                    enemies.add(tempEnemy);
+                    Enemy randomEnemy = (1 == randomDeterminant) ? new Jellyfish(this, random(720), game.screenHeight) : new Starfish(this, random(720), game.screenHeight);
+                    enemies.add(randomEnemy);
                     enemySpawnDelay += 0.3;
                     numEnemies++;
                 }

@@ -35,10 +35,8 @@ public class Enemy extends Entity {
 
     void render(float delta){
         super.render();
-        // Default: still
-        if (moveType == 0) return;
         // Horizontal movement (right)
-        else if (moveType == 1) {position.x += moveSpeed;}
+        if (moveType == 1) {position.x += moveSpeed;}
         // Horizontal movement (left)
         else if (moveType == 2) {position.x -= moveSpeed;}
         // Vertical movement (down)

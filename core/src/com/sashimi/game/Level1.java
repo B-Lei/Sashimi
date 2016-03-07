@@ -1,14 +1,18 @@
 package com.sashimi.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class Level1 extends GameScreen {
     int spawnedBoss = 0;
+    Music boss;
 
     public Level1 (final Sashimi game) {
         super(game);
+        boss = Gdx.audio.newMusic(Gdx.files.internal("Music/boss.wav"));
     }
 
     @Override
@@ -22,6 +26,8 @@ public class Level1 extends GameScreen {
         if (secondsElapsed > 24 && secondsElapsed < 27) {spawnJellyRow(deltaTime, 900, 1);}
         if (secondsElapsed > 28 && secondsElapsed < 31) {spawnJellyRow(deltaTime, 800, 1);}
         if (secondsElapsed > 31 && justOnce == 0) {
+            BGM.stop();
+            boss.play();
             enemies.add(new Level1Boss(this, game.screenWidth/2, 1100));
             numEnemies++;
             justOnce++;
@@ -37,5 +43,33 @@ public class Level1 extends GameScreen {
         //TODO remove
         //game.level1Boss();
         super.render(delta);
+    }
+
+    @Override
+    public void show() {
+        BGM.setLooping(true);
+        BGM.setVolume((float) 0.6);
+        boss.setLooping(true);
+        boss.setVolume((float) 0.6);
+        BGM.play();
+    }
+
+    @Override
+    public void hide() {
+        boss.stop();
+    }
+
+    @Override
+    public void dispose() {
+//        pauseButton.dispose();
+        you.dispose();
+        BGtexture.dispose();
+        for(Enemy e: enemies){
+            e.dispose();
+        }
+        BGM.dispose();
+        boss.dispose();
+        hurt.dispose();
+        enemyDestroyed.dispose();
     }
 }

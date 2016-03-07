@@ -12,15 +12,23 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
     protected OrthographicCamera camera;
+
     ArrayList<Bullet> bulletManager = new ArrayList<Bullet>();
     public Bullet bullet;
+
     final protected Rectangle hitbox;
     final Texture hitboxTexture;
+
     private int activeTouch = 0;
     private int touchMoveSpeed = 1500;
     private int keyMoveSpeed = 600;
     private int playerSpacing = 150;
     private Vector2 velocity;
+
+    protected float invincibleDelay = 0;
+    protected float invincibleTimeTotal = 0;
+    protected boolean invincibleToggle = true;
+
     public double prevHitTime = 0;
     private int score;
     public int enemiesHit;
@@ -54,10 +62,21 @@ public class Player extends Entity {
         return score;
     }
 
-    // WIP
-    public void invincible(float deltaTime) {
-        while (deltaTime - 5 < 0) {
-            return;
+    public void checkInvincibility(float deltaTime) {
+        invincibleTimeTotal += deltaTime;
+        invincibleDelay -= deltaTime;
+        if (invincibleTimeTotal < 4) {
+            if (invincibleDelay <= 0) {
+                invincibleToggle = !invincibleToggle;
+                visibleTexture = (invincibleToggle);
+                invincibleDelay += 0.07;
+            }
+        }
+        else {
+            invincibleTimeTotal = 0;
+            invincibleDelay = 0;
+            visibleTexture = true;
+            invincible = false;
         }
     }
 
@@ -177,7 +196,8 @@ public class Player extends Entity {
         screen.game.batch.draw(hitboxTexture, hitbox.x, hitbox.y, hitbox.getWidth(), hitbox.getHeight());
 
         fireBullet(deltaTime);
-
         renderBullets();
+
+        if (invincible) checkInvincibility(deltaTime);
     }
 }

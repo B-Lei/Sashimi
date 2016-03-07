@@ -20,6 +20,8 @@ public class Entity {
     protected int bulletVelocity;
     protected float fireDelay;
     protected boolean firesBullets;
+    protected boolean visibleTexture = true;
+    protected boolean invincible = false;
 
     Entity(GameScreen screen, int x, int y, String textureName){
         texture = new Texture(Gdx.files.internal(textureName));
@@ -63,7 +65,7 @@ public class Entity {
     }
 
     void render(){
-        screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
+        if (visibleTexture) screen.game.batch.draw(texture, position.x, position.y, position.getWidth(), position.getHeight());
     }
 
     void dispose(){

@@ -16,7 +16,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 public class GameScreen implements Screen {
     final Sashimi game;
 
-    private float gameTime = 0;
+    protected float gameTime = 0;
     private int justOnce = 0;
 
     protected Texture BG;
@@ -112,8 +112,9 @@ public class GameScreen implements Screen {
         for(int i=0; i<enemies.size(); i++){
             Enemy e = enemies.get(i);
             if(e.isHit(you.getHitbox())){
-                you.health--; // COMMENT OUT FOR INVINCIBILITY
-                e.health--;
+                if (!you.invincible) you.health--; // COMMENT OUT FOR INVINCIBILITY
+                you.invincible = true;
+                if (!e.invincible) e.health--;
                 System.out.println("Collided with Enemy. Your HP: "+ you.health);
                 if (e.health <= 0) {
                     //System.out.println("Enemy is destroyed");
@@ -128,7 +129,7 @@ public class GameScreen implements Screen {
             // From your bullets:
             for(int j=0; j<you.bulletManager.size(); j++){
                 if(e.isHit(you.bulletManager.get(j).getPosition())){
-                    e.health--;
+                    if (!e.invincible) e.health--;
                     you.bulletManager.get(j).dispose();
                     you.bulletManager.remove(j);
                     j--;
@@ -142,13 +143,16 @@ public class GameScreen implements Screen {
                 }
             }
             // For enemy bullets:
-            for(int j=0; j<enemyBulletManager.size(); j++){
-                if(you.isHit(enemyBulletManager.get(j).getPosition())){
-                    you.health--; // COMMENT OUT FOR INVINCIBILITY
-                    System.out.println("Hit by Bullet. Your HP: "+ you.health);
-                    enemyBulletManager.get(j).dispose();
-                    enemyBulletManager.remove(j);
-                    j--;
+            for(int j=0; j<enemyBulletManager.size(); j++) {
+                if (!you.invincible) {
+                    if (you.isHit(enemyBulletManager.get(j).getPosition())) {
+                        you.health--; // COMMENT OUT FOR INVINCIBILITY
+                        you.invincible = true;
+                        System.out.println("Hit by Bullet. Your HP: " + you.health);
+                        enemyBulletManager.get(j).dispose();
+                        enemyBulletManager.remove(j);
+                        j--;
+                    }
                 }
             }
         }

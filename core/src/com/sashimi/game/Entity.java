@@ -15,7 +15,8 @@ import java.util.ArrayList;
 public class Entity {
     final GameScreen screen;
     final protected Rectangle position;
-    final Texture texture;
+    //Removed final because some characters have multiple stages
+    Texture texture;
     public int health;
     protected int bulletVelocity;
     protected float fireDelay;

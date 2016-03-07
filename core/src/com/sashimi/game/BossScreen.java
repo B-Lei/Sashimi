@@ -9,23 +9,13 @@ public class BossScreen extends GameScreen {
     BossScreen(final Sashimi game) {
         super(game);
         this.game = game;
-        enemies.add(new Level1Boss(this,500,1000));
     }
-
     @Override
-    public void render(float delta){
-        game.batch.begin();
-        game.batch.draw(BGtexture, BGposition.x, BGposition.y, BGposition.getWidth(), BGposition.getHeight());
-        you.render(delta);
-        for(Enemy e: enemies){
-            e.render();
+    public void spawnEnemies(float deltaTime){
+        if (justOnce == 0) {
+            enemies.add(new Level1Boss(this, 500, 1000));
+            numEnemies++;
+            justOnce = 1;
         }
-        game.batch.end();
     }
-
-    @Override
-    public void dispose(){
-
-    }
-
 }

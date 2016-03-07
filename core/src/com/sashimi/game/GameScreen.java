@@ -89,11 +89,27 @@ public class GameScreen implements Screen {
         }
     }
 
+    public void spawnRandomEnemies (float deltaTime) {
+        // Spawn random enemies up until 20
+        if (numEnemies < 20) {
+            if (you.health > 0) {
+                enemySpawnDelay -= deltaTime;
+                if (enemySpawnDelay <= 0) {
+                    int randomDeterminant = random(1);
+                    Enemy randomEnemy = (1 == randomDeterminant) ? new Jellyfish(this, random(720), game.screenHeight) : new Starfish(this, random(720), game.screenHeight);
+                    enemies.add(randomEnemy);
+                    enemySpawnDelay += 0.3;
+                    numEnemies++;
+                }
+            }
+        }
+    }
+
     public void renderEnemiesAndBullets (float deltaTime) {
         // Renders enemies
         for(Enemy e: enemies) {
             if (e != null) {
-                e.render();
+                e.render(deltaTime);
                 e.fireBullet(deltaTime, enemyBulletManager);
             }
         }
@@ -101,6 +117,7 @@ public class GameScreen implements Screen {
         for (int i=0; i<enemyBulletManager.size(); i++) {
             Bullet savedBullet = enemyBulletManager.get(i);
             savedBullet.update();
+            // Saves memory by deleting bullets out of bounds
             if(savedBullet.bulletLocation.x > -30 && savedBullet.bulletLocation.x < game.screenWidth && savedBullet.bulletLocation.y > 0 && savedBullet.bulletLocation.y < game.screenHeight)
                 game.batch.draw(savedBullet.texture, savedBullet.bulletLocation.x, savedBullet.bulletLocation.y);
             else {
@@ -165,6 +182,14 @@ public class GameScreen implements Screen {
                         j--;
                     }
                 }
+            }
+
+            // Delete enemies out of bounds, with 100 pixel buffer for spawning
+            if(e.position.x < -100 || e.position.x > game.screenWidth+100 || e.position.y < -100 || e.position.y > game.screenHeight+100) {
+                e.dispose();
+                enemies.remove(e);
+                numEnemies--;
+                System.out.println("Disposed of enemy");
             }
         }
     }

@@ -29,7 +29,17 @@ public class Enemy extends Entity {
         }
     }
 
-    void render(){
+    public void move (float deltaTime, int code) {
+        switch (code) {
+            // Horizontal movement
+            case 1: {
+                position.x += moveSpeed;
+            }
+        }
+    }
+
+    void render(float delta){
         super.render();
+        move(delta, 1);
     }
 }

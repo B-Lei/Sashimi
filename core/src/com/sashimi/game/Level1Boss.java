@@ -4,15 +4,18 @@ package com.sashimi.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
+
 public class Level1Boss extends RandomEnemy{
     private int stage = 0;
     private int stageDuration = 0;
     private int direction = 1;
+    private Entity beam = new Entity(screen,(int)this.getPosition().x,(int)this.getPosition().y,"Bullets/beam2.png" );
 
     private Texture stages[] = new Texture[7];
 
     Level1Boss(GameScreen screen, int x, int y){
-        super(screen,x,y,"Stage1.png");
+        super(screen, x, y, "Stage1.png");
         stages[0] = new Texture(Gdx.files.internal("Enemies/Stage1.png"));
         stages[1] = new Texture(Gdx.files.internal("Enemies/Stage2.png"));
         stages[2] = new Texture(Gdx.files.internal("Enemies/Stage3.png"));
@@ -25,6 +28,7 @@ public class Level1Boss extends RandomEnemy{
 
     @Override
     void render(){
+        super.render();
         moveLeftAndRight();
         screen.game.batch.draw(stages[stage],this.getPosition().x,this.getPosition().y);
         if(stageDuration == 0){
@@ -37,7 +41,15 @@ public class Level1Boss extends RandomEnemy{
             }
 
         }
-        stageDuration = ((stageDuration + 1)/100000)%7;
+        if(stage == 6){
+            beam.setX((int)this.getPosition().getX());
+            beam.setY((int)this.getPosition().getY()-30);
+            screen.game.batch.draw(beam.texture,beam.getPosition().getX(),beam.getPosition().getY());
+            stageDuration = (stageDuration +1)%21;
+        }
+        else {
+            stageDuration = (stageDuration + 1) % 7;
+        }
 
     }
 
@@ -49,15 +61,7 @@ public class Level1Boss extends RandomEnemy{
         }
     }
 
-    void moveLeftAndRight(){
-        if(position.contains(targetX,position.getY())){
-            targetX = random.nextInt(screen.game.screenWidth/2);
-        }
-        if(position.getX() < targetX){
-            position.setX(position.getX() + moveSpeed);
-        }
-        else{
-            position.setX(position.getX() - moveSpeed);
-        }
-    }
+
+
+
 }

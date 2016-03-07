@@ -27,7 +27,7 @@ public class Level1 extends GameScreen {
     @Override
     public void render(float delta) {
         //TODO remove
-        //game.level1Boss();
+        game.level1Boss();
         super.render(delta);
     }
 }

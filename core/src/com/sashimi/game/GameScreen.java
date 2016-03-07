@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
     float rumbleTime = 0.2f;
     float cameraX, cameraY;
     float current_time = 0;
-    float power = 10;
+    float power = 7;
     float current_power = 0;
     boolean coordToggle = true;
     private float rumbleDelay = 0;
@@ -200,8 +200,8 @@ public class GameScreen implements Screen {
         if(current_time <= rumbleTime) {
             if (rumbleDelay <= 0) {
                 current_power = power * ((rumbleTime - current_time) / rumbleTime);
-                cameraX = ((coordToggle) ? 0.8f : -0.8f) * 2 * current_power;
-                cameraY = ((coordToggle) ? -0.12f : 0.12f) * 2 * current_power;
+                cameraX = ((coordToggle) ? 0.8f-deltaTime : -0.8f-deltaTime) * 2 * current_power;
+                cameraY = ((coordToggle) ? -1.3f-deltaTime : 1.3f-deltaTime) * 2 * current_power;
 
                 // Set the camera to new x/y position
                 you.camera.translate(-cameraX, -cameraY);

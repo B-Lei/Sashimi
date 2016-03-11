@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
         int yourWidth = 30;
         this.game = game;
 
-        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/sashimi.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/Sashimi.ogg"));
         hurt = Gdx.audio.newSound(Gdx.files.internal("Music/hurt.wav"));
         enemyDestroyed = Gdx.audio.newSound(Gdx.files.internal("Music/enemyDestroyed.wav"));
 

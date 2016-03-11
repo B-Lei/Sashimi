@@ -26,7 +26,7 @@ public class GameOverScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
-        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/GameOver.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/GameOver.ogg"));
 
         infoFont = new BitmapFont();
         infoFont.setColor(Color.WHITE);

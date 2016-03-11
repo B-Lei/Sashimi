@@ -24,7 +24,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         batch = new SpriteBatch();
-        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenu.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/MainMenu.ogg"));
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
         //Sets up a play button
@@ -68,7 +68,6 @@ public class MainMenuScreen implements Screen {
             if(playButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){
                 game.level1();
                 //button.play();
-                BGM.stop();
             }
             //Check if the info button is touched
             else if(infoButton.contains((int)touchPos.x,(int)touchPos.y,game.screenHeight)){

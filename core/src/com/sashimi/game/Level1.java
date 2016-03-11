@@ -12,7 +12,7 @@ public class Level1 extends GameScreen {
 
     public Level1 (final Sashimi game) {
         super(game);
-        boss = Gdx.audio.newMusic(Gdx.files.internal("Music/boss.wav"));
+        boss = Gdx.audio.newMusic(Gdx.files.internal("Music/boss.ogg"));
     }
 
     @Override

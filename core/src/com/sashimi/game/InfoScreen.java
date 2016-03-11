@@ -29,7 +29,7 @@ public class InfoScreen implements Screen {
         camera.setToOrtho(false, game.screenWidth, game.screenHeight);
         //button = Gdx.audio.newSound(Gdx.files.internal("Music/button.wav"));
 
-        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/info.wav"));
+        BGM = Gdx.audio.newMusic(Gdx.files.internal("Music/info.ogg"));
 
         //Set up water image as background
         infoBG = new Texture(Gdx.files.internal("BG/seaBG.png"));

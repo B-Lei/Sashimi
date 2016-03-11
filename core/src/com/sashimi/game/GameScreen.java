@@ -20,7 +20,7 @@ public class GameScreen implements Screen {
     Sound hurt;
     Sound enemyDestroyed;
 
-    protected int startingTime = (int)(System.nanoTime()/1e9);
+    protected int startingTime = (int)(System.currentTimeMillis()/1000);
     protected int secondsElapsed = 0;
     protected int justOnce = 0;
 
@@ -101,7 +101,7 @@ public class GameScreen implements Screen {
             tempEnemy = new Jellyfish(this, spawnPoint, height-100, direction);
             enemies.add(tempEnemy);
             numEnemies += 2;
-            enemySpawnDelay += 0.3;
+            enemySpawnDelay += 0.4;
         }
     }
 
@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
             tempEnemy.bulletVelocity = new Vector2(-3,-6);
             enemies.add(tempEnemy);
             numEnemies += 2;
-            enemySpawnDelay += 0.4;
+            enemySpawnDelay += 0.5;
         }
     }
 
@@ -271,7 +271,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         game.batch.draw(BGtexture, BGposition.x, BGposition.y, BGposition.getWidth(), BGposition.getHeight());
         game.batch.draw(BGtexture2, BGposition2.x, BGposition2.y, BGposition2.getWidth(), BGposition2.getHeight());
-        updateGameTime((int) (System.nanoTime() / 1e9));
+        updateGameTime((int) (System.currentTimeMillis() / 1000));
         scrollBG();
 
         you.render(delta);

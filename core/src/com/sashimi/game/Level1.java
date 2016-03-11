@@ -24,8 +24,8 @@ public class Level1 extends GameScreen {
         if (secondsElapsed > 17 && secondsElapsed < 22) {spawnJellySideColumns(deltaTime, 100);}
         if (secondsElapsed > 22 && secondsElapsed < 24) {spawnJellySideColumns(deltaTime, 200);}
         if (secondsElapsed > 24 && secondsElapsed < 27) {spawnJellyRow(deltaTime, 900, 1);}
-        if (secondsElapsed > 28 && secondsElapsed < 31) {spawnJellyRow(deltaTime, 800, 1);}
-        if (secondsElapsed > 31 && justOnce == 0) {
+        if (secondsElapsed > 27 && secondsElapsed < 31) {spawnJellyRow(deltaTime, 800, 1);}
+        if (secondsElapsed > 33 && justOnce == 0) {
             BGM.stop();
             boss.play();
             enemies.add(new Level1Boss(this, game.screenWidth/2, 1100));

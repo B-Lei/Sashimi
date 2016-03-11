@@ -16,7 +16,7 @@ public class Level1Boss extends RandomEnemy{
 
     Level1Boss(GameScreen screen, int x, int y){
         super(screen, x, y, "Stage1.png");
-        health = 75;
+        health = 50;
         stages[0] = new Texture(Gdx.files.internal("Enemies/Stage1.png"));
         stages[1] = new Texture(Gdx.files.internal("Enemies/Stage2.png"));
         stages[2] = new Texture(Gdx.files.internal("Enemies/Stage3.png"));
